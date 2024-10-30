@@ -1,1 +1,17 @@
-<p>registro works!</p>
+<div>
+
+    <button (click)="seleccionarTipoUsuario('especialista')">
+        Especialista
+    </button>
+    <button (click)="seleccionarTipoUsuario('paciente')">
+        Paciente
+    </button>
+
+    @if(tipoUsuarioSeleccionado === 'especialista') {
+        <app-form-registro [tipoUsuario]="'especialista'"></app-form-registro>
+    }
+    @if(tipoUsuarioSeleccionado === 'paciente') {
+        <app-form-registro [tipoUsuario]="'paciente'"></app-form-registro>
+    }
+
+</div>

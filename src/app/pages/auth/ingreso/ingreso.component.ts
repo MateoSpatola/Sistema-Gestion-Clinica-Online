@@ -41,10 +41,28 @@ export class IngresoComponent {
     if (this.form.valid) {
       this._notificationService.showLoadingAlert('Iniciando sesión...');
       try {
-        await this._authService.signIn(this.form.value.correo!, this.form.value.clave!);
-        this.form.reset();
-        this._notificationService.closeAlert();
-        this._notificationService.routerLink('');
+        const userCredential = await this._authService.signIn(this.form.value.correo!, this.form.value.clave!);
+        if (userCredential.user?.emailVerified) {
+          this.form.reset();
+          this._notificationService.closeAlert();
+          this._notificationService.routerLink('');
+        }
+        else {
+          await this._authService.signOut();
+          this._notificationService.closeAlert();
+          this._notificationService.showVerificationAlert(
+            'Debes verificar tu correo electrónico para acceder.',
+            'Reenviar correo de verificación',
+            async () => {
+              await this._authService.sendVerificationEmail(userCredential.user);
+              this._notificationService.showAlert(
+                '¡Correo de verificación reenviado!',
+                'success',
+                3000
+              );
+            }
+          );
+        }
       } catch (error: any) {
         this._notificationService.closeAlert();
         if (error.code === 'auth/invalid-credential') {

@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   updateProfile,
@@ -26,8 +27,16 @@ export class AuthService {
   signUp(email: string, password: string, name: string): Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password)
     .then(response => {
-      return updateProfile(response.user, { displayName: name }).then(() => response);
+      return updateProfile(response.user, { displayName: name })
+      .then(() => {
+        return sendEmailVerification(response.user)
+        .then(() => response);
+      });
     });
+  }
+
+  sendVerificationEmail(user: any): Promise<void> {
+    return sendEmailVerification(user);
   }
 
   sendRecoveryEmail(email: string): Promise<void> {

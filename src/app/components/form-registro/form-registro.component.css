@@ -1,0 +1,19 @@
+
+mat-form-field {
+    width: 300px;
+    padding-bottom: 1rem;
+}
+
+.registro {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.registro button {
+    width: 300px;
+}
+
+a {
+    text-decoration: none;
+}
+

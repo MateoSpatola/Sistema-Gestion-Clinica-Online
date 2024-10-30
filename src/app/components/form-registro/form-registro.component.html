@@ -1,0 +1,175 @@
+
+<h2 class="">Registro {{tipoUsuario}}</h2>
+<form [formGroup]="form" (ngSubmit)="submit()" (keypress.enter)="submit()">
+    <div class="">
+        
+        <!-- Nombre -->
+        <div class="">
+            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                <mat-icon matPrefix>chevron_right</mat-icon>
+                <mat-label>Nombre</mat-label>
+                <input matInput type="text" [formControl]="form.controls.nombre" placeholder="Ingrese su nombre">
+                @if (form.controls.nombre.hasError('required')) {
+                    <mat-error>El nombre es <strong>requerido</strong></mat-error>
+                }
+                @if (form.controls.nombre.hasError('minlength')) {
+                    <mat-error>El nombre debe tener al menos <strong>4 caracteres</strong></mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <!-- Apellido -->
+        <div class="">
+            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                <mat-icon matPrefix>chevron_right</mat-icon>
+                <mat-label>Apellido</mat-label>
+                <input matInput type="text" [formControl]="form.controls.apellido" placeholder="Ingrese su apellido">
+                @if (form.controls.apellido.hasError('required')) {
+                    <mat-error>El apellido es <strong>requerido</strong></mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <!-- Edad -->
+        <div class="">
+            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                <mat-icon matPrefix>chevron_right</mat-icon>
+                <mat-label>Edad</mat-label>
+                <input matInput type="number" [formControl]="form.controls.edad" placeholder="Ingrese su edad">
+                @if (form.controls.edad.hasError('required')) {
+                    <mat-error>La edad es <strong>requerida</strong></mat-error>
+                }
+                @if (form.controls.edad.hasError('min') || form.controls.edad.hasError('max')) {
+                    <mat-error>Ingrese una edad <strong>válida</strong></mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <!-- DNI -->
+        <div class="">
+            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                <mat-icon matPrefix>chevron_right</mat-icon>
+                <mat-label>DNI</mat-label>
+                <input matInput type="number" [formControl]="form.controls.dni" placeholder="Ingrese su dni">
+                @if (form.controls.dni.hasError('required')) {
+                    <mat-error>El dni es <strong>requerido</strong></mat-error>
+                }
+                @if (form.controls.dni.hasError('min') || form.controls.dni.hasError('max')) {
+                    <mat-error>Ingrese un dni <strong>válido</strong></mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        @if(tipoUsuario == "paciente") {
+            <!-- Obra Social -->
+            <div class="">
+                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                    <mat-icon matPrefix>chevron_right</mat-icon>
+                    <mat-label>Obra Social</mat-label>
+                    <input matInput type="text" [formControl]="form.controls.obraSocial" placeholder="Ingrese su obra social">
+                    @if (form.controls.obraSocial.hasError('required')) {
+                        <mat-error>La obra social es <strong>requerida</strong></mat-error>
+                    }
+                </mat-form-field>
+            </div>
+        }
+
+        @if(tipoUsuario == "especialista") {
+            <!-- Especialidades -->
+            <div class="">
+                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                    <mat-icon matPrefix>chevron_right</mat-icon>
+                    <mat-label>Especialidades</mat-label>
+                    <mat-chip-grid #chipGrid [formControl]="form.controls.especialidades">
+                        @for (especialidad of especialidadesSeleccionadas; track especialidad) {
+                            <mat-chip-row (removed)="eliminarEspecialidad(especialidad)">
+                                {{especialidad}}
+                                <button matChipRemove>
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                        }
+                    </mat-chip-grid>
+                    <input
+                            [formControl]="form.controls.especialidades"
+                            placeholder="Ingrese una especialidad"
+                            [matChipInputFor]="chipGrid"
+                            [matAutocomplete]="auto"
+                            (matChipInputTokenEnd)="agregarEspecialidad($event)"
+                            [(ngModel)]="especialidadActual"
+                    />
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="especialidadSeleccionada($event)">
+                        @for (especialidad of especialidadesFiltradas(); track especialidad) {
+                            <mat-option [value]="especialidad">{{especialidad}}</mat-option>
+                        }
+                    </mat-autocomplete>
+                    @if (form.controls.especialidades.hasError('required')) {
+                        <mat-error>Seleccione <strong>al menos una</strong> especialidad</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+        }
+        
+
+        <!-- Correo -->
+        <div class="">
+            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                <mat-icon matPrefix>chevron_right</mat-icon>
+                <mat-label>Correo</mat-label>
+                <input matInput type="email" [formControl]="form.controls.correo" placeholder="Ingrese su correo">
+                @if (form.controls.correo.hasError('email')) {
+                    <mat-error >Ingrese un correo valido</mat-error>
+                }
+                @if (form.controls.correo.hasError('required')) {
+                    <mat-error>El correo es <strong>requerido</strong></mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="">
+            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                <mat-icon matPrefix>chevron_right</mat-icon>
+                <mat-label>Contraseña</mat-label>
+                <input matInput [formControl]="form.controls.clave" placeholder="Ingrese su contraseña" [type]="mostrarClave ? 'text' : 'password'" >
+                <mat-icon matSuffix (click)="cambiarVisibilidadClave()">{{mostrarClave ? 'visibility_off' : 'visibility'}}</mat-icon>
+                @if (form.controls.clave.hasError('required')) {
+                    <mat-error>La contraseña es <strong>requerida</strong></mat-error>
+                }
+                @if (form.controls.clave.hasError('minlength')) {
+                    <mat-error>La contraseña debe tener al menos <strong>8 caracteres</strong></mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <!-- Imagen Perfil -->
+        <div class="">
+            <label>Imagen Perfil:    </label>
+            <input type="file" [formControl]="form.controls.imagenPerfil">
+        </div>
+
+        @if(tipoUsuario == "paciente") {
+            <!-- Imagen Portada -->
+            <div class="">
+                <label>Imagen Portada:    </label>
+                <input type="file" [formControl]="form.controls.imagenPortada">
+            </div>
+        }
+
+        
+        <!-- Botón de registro -->
+        <div class="registro">
+            <button mat-fab extended type="submit">
+                <mat-icon>person_add</mat-icon>
+                Crear cuenta
+            </button>
+        </div>
+
+        <!-- Ingresar -->
+        <div class="">
+            <span>¿Ya tenés una cuenta?</span>
+            <a routerLink="/ingreso">Iniciar sesión</a>
+        </div>
+
+    </div> 
+</form>

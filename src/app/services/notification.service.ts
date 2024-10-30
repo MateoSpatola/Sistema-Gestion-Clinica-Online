@@ -22,6 +22,38 @@ export class NotificationService {
     });
   }
 
+  showConfirmAlert(title: string, message: string, confirmButtonText: string, onConfirm: () => void) {
+    Swal.fire({
+      title,
+      text: message,
+      icon: 'success',
+      confirmButtonText: confirmButtonText,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onConfirm();
+      }
+    });
+  }
+
+  showVerificationAlert(message: string, confirmButtonText: string, onResend: () => void) {
+    Swal.fire({
+      text: message,
+      icon: 'warning',
+      showConfirmButton: true,
+      confirmButtonText: confirmButtonText,
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      allowOutsideClick: false,
+      allowEscapeKey: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onResend();
+      }
+    });
+  }
+
   showLoadingAlert(message: string) {
     Swal.fire({
       text: message,
