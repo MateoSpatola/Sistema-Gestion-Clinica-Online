@@ -60,7 +60,7 @@
             </mat-form-field>
         </div>
 
-        @if(tipoUsuario == "paciente") {
+        @if(tipoUsuario == "Paciente") {
             <!-- Obra Social -->
             <div class="">
                 <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
@@ -74,7 +74,7 @@
             </div>
         }
 
-        @if(tipoUsuario == "especialista") {
+        @if(tipoUsuario == "Especialista") {
             <!-- Especialidades -->
             <div class="">
                 <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
@@ -148,7 +148,7 @@
             <input type="file" [formControl]="form.controls.imagenPerfil">
         </div>
 
-        @if(tipoUsuario == "paciente") {
+        @if(tipoUsuario == "Paciente") {
             <!-- Imagen Portada -->
             <div class="">
                 <label>Imagen Portada:    </label>

@@ -1,17 +1,23 @@
 <div>
 
-    <button (click)="seleccionarTipoUsuario('especialista')">
+    <button (click)="seleccionarTipoUsuario('Especialista')">
         Especialista
     </button>
-    <button (click)="seleccionarTipoUsuario('paciente')">
+    <button (click)="seleccionarTipoUsuario('Paciente')">
         Paciente
     </button>
+    <button (click)="seleccionarTipoUsuario('Administrador')">
+        Administrador
+    </button>
 
-    @if(tipoUsuarioSeleccionado === 'especialista') {
-        <app-form-registro [tipoUsuario]="'especialista'"></app-form-registro>
+    @if(tipoUsuarioSeleccionado === 'Especialista') {
+        <app-form-registro [tipoUsuario]="'Especialista'"></app-form-registro>
     }
-    @if(tipoUsuarioSeleccionado === 'paciente') {
-        <app-form-registro [tipoUsuario]="'paciente'"></app-form-registro>
+    @if(tipoUsuarioSeleccionado === 'Paciente') {
+        <app-form-registro [tipoUsuario]="'Paciente'"></app-form-registro>
+    }
+    @if(tipoUsuarioSeleccionado === 'Administrador') {
+        <app-form-registro [tipoUsuario]="'Administrador'"></app-form-registro>
     }
 
 </div>

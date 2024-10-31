@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 
-
 @Component({
   selector: 'app-form-registro',
   standalone: true,
@@ -29,14 +28,14 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
   styleUrl: './form-registro.component.css'
 })
 export class FormRegistroComponent {
-  @Input() tipoUsuario?: "paciente" | "especialista" | "administrador";
+  @Input() tipoUsuario?: "Paciente" | "Especialista" | "Administrador";
   private _authService = inject(AuthService);
   private _notificationService= inject(NotificationService);
   private _databaseService = inject(DatabaseService);
   protected mostrarClave: boolean = false;
 
   protected form = new FormGroup({
-    rol: new FormControl('', [Validators.required]),
+    tipo: new FormControl('', [Validators.required]),
     habilitado: new FormControl(false),
     nombre: new FormControl('', [Validators.required, Validators.minLength(4)]),
     apellido: new FormControl('', [Validators.required]),
@@ -57,22 +56,22 @@ export class FormRegistroComponent {
   ngOnInit(): void {
     this.configurarCamposPorTipo();
     if(this.tipoUsuario) {
-      this.form.controls.rol.setValue(this.tipoUsuario)
+      this.form.controls.tipo.setValue(this.tipoUsuario);
     }
   }
 
   configurarCamposPorTipo(): void {
     switch (this.tipoUsuario) {
-      case 'paciente':
+      case 'Paciente':
         this.form.controls.especialidades.disable();
         break;
         
-      case 'especialista':
+      case 'Especialista':
         this.form.controls.obraSocial.disable();
         this.form.controls.imagenPortada.disable();
         break;
 
-      case 'administrador':
+      case 'Administrador':
         this.form.controls.obraSocial.disable();
         this.form.controls.especialidades.disable();
         this.form.controls.imagenPortada.disable();
@@ -121,7 +120,8 @@ export class FormRegistroComponent {
       this._notificationService.showLoadingAlert('Creando cuenta...');
       try {
         await this._authService.signUp(this.form.value.correo!, this.form.value.clave!, this.form.value.nombre!);
-        await this._databaseService.setDocument('usuarios', this.form.value, this._authService.auth.currentUser?.uid);
+        this.form.controls.clave.disable();
+        await this._databaseService.setDocument('usuarios', this.form.value, this.form.value.correo!);
         this.form.reset();
         this._notificationService.closeAlert();
 
@@ -131,8 +131,6 @@ export class FormRegistroComponent {
           'Ingresar',
           () => this._notificationService.routerLink('/ingreso')
         );
-
-
       } catch (error: any) {
         this._notificationService.closeAlert();
         if (error.code === 'auth/email-already-in-use') {
