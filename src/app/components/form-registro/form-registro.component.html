@@ -1,7 +1,7 @@
 
 <h2 class="">Registro {{tipoUsuario}}</h2>
 <form [formGroup]="form" (ngSubmit)="submit()" (keypress.enter)="submit()">
-    <div class="">
+    <div class="container">
         
         <!-- Nombre -->
         <div class="">
@@ -143,16 +143,42 @@
         </div>
 
         <!-- Imagen Perfil -->
-        <div class="">
-            <label>Imagen Perfil:    </label>
-            <input type="file" [formControl]="form.controls.imagenPerfil" (change)="imagenPerfil = $event">
+        <div class="imagenPerfil">
+            <label class="titleFile">Imagen Perfil</label>
+            <label for="inputImagenPerfil" class="labelFile">
+                <mat-icon class="iconFile">upload</mat-icon>
+                <span class="file-text">
+                    {{ form.controls.imagenPerfil.value ? form.controls.imagenPerfil.value.split('\\').pop() : 'Seleccione una imagen de perfil' }}
+                </span>
+            </label>
+            <input
+                type="file" class="inputFile" id="inputImagenPerfil"
+                [formControl]="form.controls.imagenPerfil"
+                (change)="imagenPerfil = $event"
+            >
+            @if (form.controls.imagenPerfil.hasError('required') && form.controls.imagenPerfil.touched) {
+                <mat-error>La imagen de perfil es <strong>requerida</strong></mat-error>
+            }
         </div>
 
         @if(tipoUsuario == "Paciente") {
             <!-- Imagen Portada -->
-            <div class="">
-                <label>Imagen Portada:    </label>
-                <input type="file" [formControl]="form.controls.imagenPortada" (change)="imagenPortada = $event">
+            <div class="imagenPortada">
+                <label class="titleFile">Imagen Portada</label>
+                <label for="inputImagenPortada" class="labelFile">
+                    <mat-icon class="iconFile">upload</mat-icon>
+                    <span class="file-text">
+                        {{ form.controls.imagenPortada.value ? form.controls.imagenPortada.value.split('\\').pop() : 'Seleccione una imagen de portada' }}
+                    </span>
+                </label>
+                <input
+                    type="file" class="inputFile" id="inputImagenPortada"
+                    [formControl]="form.controls.imagenPortada"
+                    (change)="imagenPortada = $event"
+                >
+                @if (form.controls.imagenPortada.hasError('required') && form.controls.imagenPortada.touched) {
+                    <mat-error>La imagen de portada es <strong>requerida</strong></mat-error>
+                }
             </div>
         }
 

@@ -1,7 +1,64 @@
+.container {
+    padding: 2rem;
+}
 
 mat-form-field {
-    width: 300px;
+    width: 320px;
     padding-bottom: 1rem;
+}
+
+.imagenPerfil, .imagenPortada {
+    position: relative;
+    padding-bottom: 2rem;
+    width: 320px;
+}
+
+.imagenPerfil mat-error, .imagenPortada mat-error {
+    font-size: 12px;
+    margin-left: 15px;
+}
+
+.inputFile {
+    display: none;
+}
+
+.titleFile {
+    position: absolute;
+    left: 12px;
+    top: -11px;
+    font-size: 12.5px;
+    color: #44474E;
+    transition: 0.2s ease all;
+    pointer-events: none;
+    padding: 4px;
+    background-color: white;
+}
+
+.labelFile {
+    height: 29px;
+    display: flex;
+    align-items: center;
+    border: 2px dashed #b1b1b1;
+    border-radius: 5px;
+    padding: 12px;
+    cursor: pointer;
+    color: #404040;
+    transition: border-color 0.3s ease;
+}
+
+.labelFile:hover {
+    border-color: #1d1d1d;
+}
+
+.iconFile {
+    font-size: 24px;
+    margin-right: 15px;
+}
+
+.file-text {
+    font-size: 16px;
+    color: #404040;
+    text-align: center;
 }
 
 .registro {
@@ -10,7 +67,7 @@ mat-form-field {
 }
 
 .registro button {
-    width: 300px;
+    width: 320px;
 }
 
 a {

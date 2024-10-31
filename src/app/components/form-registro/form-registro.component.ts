@@ -118,7 +118,7 @@ export class FormRegistroComponent {
   }
 
   async cargarImagen($event: Event, collection: string, imageName: string): Promise<string> {
-    const inputElement = $event!.target as HTMLInputElement;
+    const inputElement = $event.target as HTMLInputElement;
     if (inputElement.files && inputElement.files[0]) {
       const file = inputElement.files[0];
       const blob = new Blob([file], {type: file.type});
@@ -128,7 +128,6 @@ export class FormRegistroComponent {
   }
 
   async submit(): Promise<void> {
-    console.log(this.form.value.habilitado);
     if (this.form.valid) {
       this._notificationService.showLoadingAlert('Creando cuenta...');
       try {
@@ -161,6 +160,9 @@ export class FormRegistroComponent {
           this._notificationService.showAlert('Error inesperado: ' + error.code, 'error', 2000);
         }
       }
+    }
+    else {
+      this.form.markAllAsTouched();
     }
   }
 
