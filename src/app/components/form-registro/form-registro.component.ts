@@ -52,6 +52,8 @@ export class FormRegistroComponent {
   protected especialidades: string[] = ['Cardiología', 'Dermatología', 'Pediatría', 'Neurología', 'Oncología'];
   protected especialidadesSeleccionadas: string[] = [];
   protected especialidadActual: string = '';
+  protected imagenPerfil!: Event;
+  protected imagenPortada!: Event;
 
   ngOnInit(): void {
     this.configurarCamposPorTipo();
@@ -114,13 +116,28 @@ export class FormRegistroComponent {
     this.mostrarClave = !this.mostrarClave;
   }
 
+  async cargarImagen($event: Event, collection: string, imageName: string): Promise<string> {
+    const inputElement = $event!.target as HTMLInputElement;
+    if (inputElement.files && inputElement.files[0]) {
+      const file = inputElement.files[0];
+      const blob = new Blob([file], {type: file.type});
+      return await this._databaseService.uploadImage(collection, blob, imageName);
+    }
+    return '';
+  }
+
   async submit(): Promise<void> {
-    console.log(this.form.value);
     if (this.form.valid) {
       this._notificationService.showLoadingAlert('Creando cuenta...');
       try {
         await this._authService.signUp(this.form.value.correo!, this.form.value.clave!, this.form.value.nombre!);
         this.form.controls.clave.disable();
+        const urlImagenPerfil = await this.cargarImagen(this.imagenPerfil, 'usuarios', this.form.value.correo! + '_perfil')
+        this.form.value.imagenPerfil = urlImagenPerfil;
+        if (this.tipoUsuario == "Paciente") {
+          const urlImagenPortada = await this.cargarImagen(this.imagenPortada, 'usuarios', this.form.value.correo! + '_portada')
+          this.form.value.imagenPortada = urlImagenPortada;
+        }
         await this._databaseService.setDocument('usuarios', this.form.value, this.form.value.correo!);
         this.form.reset();
         this._notificationService.closeAlert();
@@ -132,6 +149,7 @@ export class FormRegistroComponent {
           () => this._notificationService.routerLink('/ingreso')
         );
       } catch (error: any) {
+        this.form.controls.clave.enable();
         this._notificationService.closeAlert();
         if (error.code === 'auth/email-already-in-use') {
           this._notificationService.showAlert('¡Error: El correo ya está registrado!', 'error', 2000);

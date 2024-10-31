@@ -91,12 +91,12 @@
                         }
                     </mat-chip-grid>
                     <input
-                            [formControl]="form.controls.especialidades"
-                            placeholder="Ingrese una especialidad"
-                            [matChipInputFor]="chipGrid"
-                            [matAutocomplete]="auto"
-                            (matChipInputTokenEnd)="agregarEspecialidad($event)"
-                            [(ngModel)]="especialidadActual"
+                        [formControl]="form.controls.especialidades"
+                        placeholder="Ingrese una especialidad"
+                        [matChipInputFor]="chipGrid"
+                        [matAutocomplete]="auto"
+                        (matChipInputTokenEnd)="agregarEspecialidad($event)"
+                        [(ngModel)]="especialidadActual"
                     />
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="especialidadSeleccionada($event)">
                         @for (especialidad of especialidadesFiltradas(); track especialidad) {
@@ -145,18 +145,17 @@
         <!-- Imagen Perfil -->
         <div class="">
             <label>Imagen Perfil:    </label>
-            <input type="file" [formControl]="form.controls.imagenPerfil">
+            <input type="file" [formControl]="form.controls.imagenPerfil" (change)="imagenPerfil = $event">
         </div>
 
         @if(tipoUsuario == "Paciente") {
             <!-- Imagen Portada -->
             <div class="">
                 <label>Imagen Portada:    </label>
-                <input type="file" [formControl]="form.controls.imagenPortada">
+                <input type="file" [formControl]="form.controls.imagenPortada" (change)="imagenPortada = $event">
             </div>
         }
 
-        
         <!-- Botón de registro -->
         <div class="registro">
             <button mat-fab extended type="submit">
