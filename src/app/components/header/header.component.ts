@@ -39,6 +39,7 @@ export class HeaderComponent {
   async salir() {
     try {
       await this._authService.signOut();
+      this._notificationService.routerLink('');
       this._notificationService.showAlert('¡Sesión cerrada!', 'success', 1000);
     } catch (error) {
       this._notificationService.closeAlert();

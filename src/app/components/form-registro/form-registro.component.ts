@@ -69,7 +69,7 @@ export class FormRegistroComponent {
         break;
         
       case 'Especialista':
-        this.form.value.habilitado = false;
+        this.form.controls.habilitado.setValue(false);
         this.form.controls.obraSocial.disable();
         this.form.controls.imagenPortada.disable();
         break;
@@ -128,6 +128,7 @@ export class FormRegistroComponent {
   }
 
   async submit(): Promise<void> {
+    console.log(this.form.value.habilitado);
     if (this.form.valid) {
       this._notificationService.showLoadingAlert('Creando cuenta...');
       try {
@@ -141,8 +142,8 @@ export class FormRegistroComponent {
         }
         await this._databaseService.setDocument('usuarios', this.form.value, this.form.value.correo!);
         this.form.reset();
+        await this._authService.signOut();
         this._notificationService.closeAlert();
-
         this._notificationService.showConfirmAlert(
           '¡Registro exitoso!',
           'Te hemos enviado un correo de verificación. Por favor, verifica tu cuenta para poder ingresar.',
