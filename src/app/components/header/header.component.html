@@ -1,0 +1,35 @@
+<header>
+    <mat-toolbar color="primary">
+        <a routerLink="" class="logo">
+            <img src="logo.png" alt="Logo">
+        </a>
+        <span class="spacer"></span>
+        @if (user) {
+            @if(user.displayName == 'Administrador') {
+                <button mat-button routerLink="/usuarios">Usuarios</button>
+            }
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>person</mat-icon>
+            </button>
+            
+            <mat-menu #menu="matMenu" class="menu">
+
+                <div class="user-info">
+                    <mat-icon>account_circle</mat-icon>
+                    <div class="user-details">
+                        <div class="user-name">{{user.displayName}}</div>
+                        <div class="user-email">{{user.email}}</div>
+                    </div>
+                </div>
+            
+                <mat-divider></mat-divider>
+                
+                <button mat-menu-item (click)="salir()">
+                    <mat-icon>logout</mat-icon>
+                    <span>Cerrar sesión</span>
+                </button>
+            </mat-menu>
+        }
+    </mat-toolbar>
+    <div class="separator"></div>
+</header>
