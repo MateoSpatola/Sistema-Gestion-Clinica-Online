@@ -130,7 +130,7 @@ export class FormRegistroComponent {
     if (this.form.valid) {
       this._notificationService.showLoadingAlert('Creando cuenta...');
       try {
-        await this._authService.signUp(this.form.value.correo!, this.form.value.clave!, this.form.value.nombre!);
+        await this._authService.signUp(this.form.value.correo!, this.form.value.clave!, this.form.value.tipo!);
         this.form.controls.clave.disable();
         const urlImagenPerfil = await this.cargarImagen(this.imagenPerfil, 'usuarios', this.form.value.correo! + '_perfil')
         this.form.value.imagenPerfil = urlImagenPerfil;

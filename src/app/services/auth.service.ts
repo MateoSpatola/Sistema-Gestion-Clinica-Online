@@ -24,10 +24,10 @@ export class AuthService {
     return this.auth.signOut();
   }
 
-  signUp(email: string, password: string, name: string): Promise<UserCredential> {
+  signUp(email: string, password: string, tipoUsuario: string): Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password)
     .then(response => {
-      return updateProfile(response.user, { displayName: name })
+      return updateProfile(response.user, { displayName: tipoUsuario })
       .then(() => {
         return sendEmailVerification(response.user)
         .then(() => response);
