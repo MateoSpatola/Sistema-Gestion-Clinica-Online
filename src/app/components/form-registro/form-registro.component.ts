@@ -36,7 +36,7 @@ export class FormRegistroComponent {
 
   protected form = new FormGroup({
     tipo: new FormControl('', [Validators.required]),
-    habilitado: new FormControl(false),
+    habilitado: new FormControl(true),
     nombre: new FormControl('', [Validators.required, Validators.minLength(4)]),
     apellido: new FormControl('', [Validators.required]),
     edad: new FormControl('', [Validators.required, Validators.min(1), Validators.max(120)]),
@@ -69,6 +69,7 @@ export class FormRegistroComponent {
         break;
         
       case 'Especialista':
+        this.form.value.habilitado = false;
         this.form.controls.obraSocial.disable();
         this.form.controls.imagenPortada.disable();
         break;

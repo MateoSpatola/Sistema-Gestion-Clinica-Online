@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
+import { firstValueFrom } from 'rxjs';
 
 
 @Injectable({
@@ -18,6 +19,10 @@ export class DatabaseService {
 
   getDocument(collection: string) {
     return this._firestore.collection(collection).valueChanges();
+  }
+
+  getDocumentById(collection: string, documentId: string): Promise<any> {
+    return firstValueFrom(this._firestore.collection(collection).doc(documentId).valueChanges());
   }
 
   updateDocument(collection: string, data: any, documentId: string): Promise<void> {

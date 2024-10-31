@@ -6,6 +6,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
+import { DatabaseService } from '../../../services/database.service';
 
 @Component({
   selector: 'app-ingreso',
@@ -25,6 +26,7 @@ export class IngresoComponent {
 
   private _authService = inject(AuthService);
   private _notificationService= inject(NotificationService);
+  private _databaseService = inject(DatabaseService);
 
   protected mostrarClave: boolean = false;
 
@@ -42,12 +44,7 @@ export class IngresoComponent {
       this._notificationService.showLoadingAlert('Iniciando sesión...');
       try {
         const userCredential = await this._authService.signIn(this.form.value.correo!, this.form.value.clave!);
-        if (userCredential.user?.emailVerified) {
-          this.form.reset();
-          this._notificationService.closeAlert();
-          this._notificationService.routerLink('');
-        }
-        else {
+        if (!userCredential.user?.emailVerified) {
           await this._authService.signOut();
           this._notificationService.closeAlert();
           this._notificationService.showVerificationAlert(
@@ -62,6 +59,18 @@ export class IngresoComponent {
               );
             }
           );
+        }
+        else {
+          const usuario = await this._databaseService.getDocumentById('usuarios', userCredential.user.email!);
+          if (!usuario!.habilitado) {
+            await this._authService.signOut();
+            this._notificationService.showAlert('¡Error: Usuario inhabilitado, comuniquese con un administrador!', 'error', 3000);
+          }
+          else {
+            this.form.reset();
+            this._notificationService.closeAlert();
+            this._notificationService.routerLink('');
+          }
         }
       } catch (error: any) {
         this._notificationService.closeAlert();
