@@ -118,7 +118,7 @@
                 <mat-label>Correo</mat-label>
                 <input matInput type="email" [formControl]="form.controls.correo" placeholder="Ingrese su correo">
                 @if (form.controls.correo.hasError('email')) {
-                    <mat-error >Ingrese un correo valido</mat-error>
+                    <mat-error >Ingrese un correo <strong>válido</strong></mat-error>
                 }
                 @if (form.controls.correo.hasError('required')) {
                     <mat-error>El correo es <strong>requerido</strong></mat-error>
@@ -190,11 +190,14 @@
             </button>
         </div>
 
-        <!-- Ingresar -->
-        <div class="">
-            <span>¿Ya tenés una cuenta?</span>
-            <a routerLink="/ingreso">Iniciar sesión</a>
-        </div>
+        @if (!altaDesdeUnAdmin) {
+            <!-- Ingresar -->
+            <div class="">
+                <span>¿Ya tenés una cuenta?</span>
+                <a routerLink="/ingreso">Iniciar sesión</a>
+            </div>
+        }
+        
 
     </div> 
 </form>

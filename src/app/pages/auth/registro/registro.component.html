@@ -1,23 +1,30 @@
 <div>
-
     <button (click)="seleccionarTipoUsuario('Especialista')">
         Especialista
     </button>
     <button (click)="seleccionarTipoUsuario('Paciente')">
         Paciente
     </button>
-    <button (click)="seleccionarTipoUsuario('Administrador')">
-        Administrador
-    </button>
-
-    @if(tipoUsuarioSeleccionado === 'Especialista') {
-        <app-form-registro [tipoUsuario]="'Especialista'"></app-form-registro>
+    @if (adminAutenticado) {
+        <button (click)="seleccionarTipoUsuario('Administrador')">
+            Administrador
+        </button>
     }
-    @if(tipoUsuarioSeleccionado === 'Paciente') {
-        <app-form-registro [tipoUsuario]="'Paciente'"></app-form-registro>
+    
+    @if(tipoUsuarioSeleccionado) {
+        @if(tipoUsuarioSeleccionado == 'Especialista') {
+            <app-form-registro [tipoUsuario]="'Especialista'" [altaDesdeUnAdmin]="adminAutenticado"></app-form-registro>
+        }
+        @if(tipoUsuarioSeleccionado == 'Paciente') {
+            <app-form-registro [tipoUsuario]="'Paciente'" [altaDesdeUnAdmin]="adminAutenticado"></app-form-registro>
+        }
+        @if(tipoUsuarioSeleccionado == 'Administrador') {
+            <app-form-registro [tipoUsuario]="'Administrador'" [altaDesdeUnAdmin]="adminAutenticado"></app-form-registro>
+        }
     }
-    @if(tipoUsuarioSeleccionado === 'Administrador') {
-        <app-form-registro [tipoUsuario]="'Administrador'"></app-form-registro>
+    @else {
+        <p>Seleccione que tipo de usuario desea registrar.</p>
     }
+    
 
 </div>

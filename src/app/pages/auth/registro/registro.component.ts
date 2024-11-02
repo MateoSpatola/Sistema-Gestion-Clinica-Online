@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormRegistroComponent } from "../../../components/form-registro/form-registro.component";
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-registro',
@@ -9,9 +10,19 @@ import { FormRegistroComponent } from "../../../components/form-registro/form-re
   styleUrl: './registro.component.css'
 })
 export class RegistroComponent {
-  tipoUsuarioSeleccionado: string | null = null;
 
-  seleccionarTipoUsuario(tipo: string) {
+  private _authService = inject(AuthService);
+
+  protected tipoUsuarioSeleccionado?: "Paciente" | "Especialista" | "Administrador";
+  protected adminAutenticado: boolean = false;
+
+  ngOnInit(): void {
+    if (this._authService.auth.currentUser?.displayName == 'Administrador') {
+      this.adminAutenticado = true;
+    }
+  }
+
+  seleccionarTipoUsuario(tipo: "Paciente" | "Especialista" | "Administrador") {
     this.tipoUsuarioSeleccionado = tipo;
   }
 }
