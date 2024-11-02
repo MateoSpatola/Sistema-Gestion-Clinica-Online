@@ -15,6 +15,7 @@ import {
 export class AuthService {
 
   auth = inject(Auth);
+  generatingUser: boolean = false;
 
   signIn(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.auth, email, password);
@@ -25,12 +26,20 @@ export class AuthService {
   }
 
   signUp(email: string, password: string, tipoUsuario: string): Promise<UserCredential> {
+    const currentUser = this.auth.currentUser;
     return createUserWithEmailAndPassword(this.auth, email, password)
     .then(response => {
       return updateProfile(response.user, { displayName: tipoUsuario })
       .then(() => {
         return sendEmailVerification(response.user)
-        .then(() => response);
+        .then(() => {
+          if (currentUser) {
+            return this.auth.updateCurrentUser(currentUser).then(() => response);
+          } else {
+            this.signOut();
+            return response;
+          }
+        });
       });
     });
   }
