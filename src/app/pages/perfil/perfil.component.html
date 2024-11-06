@@ -1,0 +1,75 @@
+<main class="container my-3 p-4 rounded-4 d-flex justify-content-center align-items-center flex-column bg-light">
+
+    @if (!modificarHorarios) {
+        <div class="m-3">
+            <h1 class="display-5 fw-bold">Tu información</h1>
+            <div class="card shadow text-center p-3 bg-dark">
+                <div class="card-body text-light">
+                    @if (infoUsuario) {
+                        <p><strong>Tipo:</strong> {{infoUsuario.tipo}}</p>
+                        <p><strong>Nombre:</strong> {{infoUsuario.nombre}}</p>
+                        <p><strong>Apellido:</strong> {{infoUsuario.apellido}}</p>
+                        <p><strong>Edad:</strong> {{infoUsuario.edad}}</p>
+                        <p><strong>DNI:</strong> {{infoUsuario.dni}}</p>
+                        @if(infoUsuario.especialidades) {
+                            <p><strong>Especialidades:</strong> {{infoUsuario.especialidades}}</p>
+                        }
+                        @if(infoUsuario.obraSocial) {
+                            <p><strong>Obra Social:</strong> {{infoUsuario.obraSocial}}</p>
+                        }
+                        <p><strong>Correo:</strong> {{infoUsuario.correo}}</p>
+                        <p><strong>Imagen Perfil:</strong> <img [src]="infoUsuario.imagenPerfil" class="ms-2" height="100px"></p>
+                        @if(infoUsuario.imagenPortada) {
+                            <p><strong>Imagen Portada:</strong> <img [src]="infoUsuario.imagenPortada" class="ms-2" height="100px"></p>
+                        }
+                    }
+                    @else {
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if(infoUsuario && infoUsuario.tipo == 'Especialista') {
+            <button class="btn btn-dark btn-lg fw-bold" (click)="modificarHorarios = true">Mis horarios</button>
+        }
+    }
+    @else {
+        <h2 class="mb-4 fw-bold">Configura tu disponibilidad</h2>
+        @for (dia of dias; track $index) {
+            <div class="day-container my-3">
+                <div class="d-flex justify-content-between">
+                    <span class="fw-bold">{{ dia.dia }}</span>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" [(ngModel)]="dia.trabaja" (change)="cambiarDisponibilidad(dia)">
+                    </div>
+                </div>
+                <div class="d-flex mt-2">
+                    <div class="me-3">
+                        <label>Inicio:</label>
+                        <select class="form-select" [(ngModel)]="dia.inicio" [disabled]="!dia.trabaja" (change)="actualizarFin(dia)">
+                            @for (hora of obtenerOpcionesDeHorario(dia, true); track $index) {
+                                <option [value]="hora">{{ hora }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label>Fin:</label>
+                        <select class="form-select" [(ngModel)]="dia.fin" [disabled]="!dia.inicio">
+                            @for (hora of obtenerOpcionesDeHorario(dia, false, dia.inicio); track $index) {
+                                <option [value]="hora">{{ hora }}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="text-center">
+            <button class="btn btn-dark btn-lg fw-bold m-2" (click)="modificarHorarios = false">Cancelar</button>
+            <button class="btn btn-primary btn-lg fw-bold m-2" (click)="guardarHorarios()">Guardar</button>
+        </div>
+    }
+
+</main>
