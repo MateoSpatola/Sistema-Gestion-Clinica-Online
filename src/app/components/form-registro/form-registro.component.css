@@ -1,16 +1,13 @@
-.container {
-    padding: 2rem;
-}
 
 mat-form-field {
-    width: 320px;
+    width: 100%;
     padding-bottom: 1rem;
 }
 
 .imagenPerfil, .imagenPortada {
     position: relative;
+    width: 100%;
     padding-bottom: 2rem;
-    width: 320px;
 }
 
 .imagenPerfil mat-error, .imagenPortada mat-error {
@@ -24,18 +21,19 @@ mat-form-field {
 
 .titleFile {
     position: absolute;
-    left: 12px;
-    top: -11px;
+    left: 22px;
+    top: -8.5px;
     font-size: 12.5px;
     color: #44474E;
     transition: 0.2s ease all;
-    pointer-events: none;
-    padding: 4px;
+    
+    padding-left: 4px;
+    padding-right: 4px;
     background-color: white;
 }
 
 .labelFile {
-    height: 29px;
+    height: 56px;
     display: flex;
     align-items: center;
     border: 2px dashed #b1b1b1;
@@ -59,15 +57,6 @@ mat-form-field {
     font-size: 16px;
     color: #404040;
     text-align: center;
-}
-
-.registro {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-
-.registro button {
-    width: 320px;
 }
 
 a {

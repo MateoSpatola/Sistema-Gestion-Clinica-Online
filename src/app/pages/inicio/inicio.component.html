@@ -1,13 +1,27 @@
-<div>
+<main class="container my-3 p-4 rounded-4 d-flex justify-content-center align-items-center flex-column bg-light">
+    <div class="text-center">
+        <h1 class="display-3 fw-bold mb-4">Bienvenido a la Clínica Online</h1>
+        <p class="lead text-dark-emphasis">Su salud es nuestra prioridad. Acceda a consultas y tratamientos desde la comodidad de su hogar.</p>
+    </div>
 
-    <h1>Bienvenido a la Clínica Online</h1>
+    <div class="m-3">
+        <div class="card shadow text-center p-3 bg-dark">
+            <div class="card-body text-light">
+                <h3 class="card-title fw-bold">Horarios de Atención</h3>
+                <p class="card-text">Lunes a Viernes: 8:00 a 19:00</p>
+                <p class="card-text">Sábados: 8:00 a 14:00</p>
+            </div>
+        </div>
+    </div>
 
-    <button routerLink="/ingreso">
-        Iniciar sesión
-    </button>
+    <div class="text-center m-3">
+        <p class="p-3 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+            Contamos con consultorios y laboratorios, y un equipo de profesionales de diversas especialidades.
+        </p>
+    </div>
 
-    <button routerLink="/registro">
-        Registrarse
-    </button>
-
-</div>
+    <div class="text-center">
+        <button routerLink="/ingreso" class="btn btn-dark btn-lg fw-bold me-3">Iniciar sesión</button>
+        <button routerLink="/registro" class="btn btn-outline-dark btn-lg fw-bold">Registrarse</button>
+    </div>
+</main>

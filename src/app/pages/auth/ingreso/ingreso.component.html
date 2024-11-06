@@ -1,66 +1,92 @@
-<section>
-    <div>
-        <h1>Iniciar sesión</h1>
+<div class="row my-3">
+
+    <!--------------------------- Left Box ----------------------------->
+    <div class="col-md-3 d-flex justify-content-center align-items-center flex-column">
+
+        <!-- Botones de acceso rápido -->
+        <div>
+            <button 
+                class="btn px-4 mb-2 w-100 bg-white shadow" 
+                [ngClass]="{'text-danger': mostrarInicioRapido, 'text-success': !mostrarInicioRapido}" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#collapseInicioRapido" 
+                aria-expanded="false" 
+                aria-controls="collapseInicioRapido" 
+                (click)="mostrarInicioRapido = !mostrarInicioRapido">
+                <i [ngClass]="mostrarInicioRapido ? 'bi bi-x-lg fw' : 'bi bi-chevron-down'"></i>
+            </button>
+        </div>
+        <div>
+            <div class="collapse" id="collapseInicioRapido">
+                @for(usuario of usuariosInicioRapido; track $index) {
+                    <button class="btn bg-white shadow w-100 d-flex align-items-center mb-2" type="button" (click)="inicioRapido(usuario.correo, usuario.nombre)">
+                        <img [src]="usuario.imagenPerfil" class="rounded-circle me-2" height="40px">
+                        {{ usuario.nombre }}
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!--------------------------- Center Box ----------------------------->
+    <div class="col-md-6 rounded-4 p-4 d-flex justify-content-center align-items-center flex-column bg-white shadow">
+        <h2 class="mb-4 text-center fs-1 fw-bold">Iniciar sesión</h2>
+
         <form [formGroup]="form" (ngSubmit)="submit()" (keypress.enter)="submit()">
+
+            <div class="row">
+
+                <!-- Correo -->
+                <div class="col-12">
+                    <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                        <mat-icon matPrefix>email</mat-icon>
+                        <mat-label>Correo</mat-label>
+                        <input matInput type="email" [formControl]="form.controls.correo" placeholder="Ingrese su correo">
+                        @if (form.controls.correo.hasError('required')) {
+                            <mat-error>El correo es <strong>requerido</strong></mat-error>
+                        }
+                        @if (form.controls.correo.hasError('email')) {
+                            <mat-error >Ingrese un correo <strong>válido</strong></mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="col-12">
+                    <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                        <mat-icon matPrefix>password</mat-icon>
+                        <mat-label>Contraseña</mat-label>
+                        <input matInput [formControl]="form.controls.clave" placeholder="Ingrese su contraseña" [type]="mostrarClave ? 'text' : 'password'" >
+                        <mat-icon matSuffix (click)="cambiarVisibilidadClave()">{{mostrarClave ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        @if (form.controls.clave) {
+                            <mat-error>La contraseña es <strong>requerida</strong></mat-error>
+                        }
+                    </mat-form-field>
+                    <div class="recuperar text-end">
+                        <small><a routerLink="/recuperar">Olvidé mi contraseña</a></small>
+                    </div>
+                </div>
+
+                <!-- Botón de Ingreso -->
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-lg btn-primary w-100 shadow">
+                        Ingresar
+                    </button>
+                </div>
+
+                <!-- Registro -->
+                <div class="col-12 text-center mt-3">
+                    <span>¿Necesitas una cuenta? </span>
+                    <a routerLink="/registro">Registrarse</a>
+                </div>
+
+            </div>
             
-            <!-- Correo -->
-            <div>
-                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                    <mat-icon matPrefix>email</mat-icon>
-                    <mat-label>Correo</mat-label>
-                    <input matInput type="email" [formControl]="form.controls.correo" placeholder="Ingrese su correo">
-                    @if (form.controls.correo.hasError('required')) {
-                        <mat-error>El correo es <strong>requerido</strong></mat-error>
-                    }
-                    @if (form.controls.correo.hasError('email')) {
-                        <mat-error >Ingrese un correo <strong>válido</strong></mat-error>
-                    }
-                </mat-form-field>
-            </div>
-
-            <!-- Contraseña -->
-            <div>
-                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                    <mat-icon matPrefix>password</mat-icon>
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput [formControl]="form.controls.clave" placeholder="Ingrese su contraseña" [type]="mostrarClave ? 'text' : 'password'" >
-                    <mat-icon matSuffix (click)="cambiarVisibilidadClave()">{{mostrarClave ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    @if (form.controls.clave) {
-                        <mat-error>La contraseña es <strong>requerida</strong></mat-error>
-                    }
-                </mat-form-field>
-                <small><a routerLink="/recuperar">Olvidé mi contraseña</a></small>
-            </div>
-
-            <!-- Botón de Ingreso -->
-            <div>
-                <button mat-fab extended type="submit">
-                    <mat-icon>login</mat-icon>
-                    Ingresar
-                </button>
-            </div>
-
-            <!-- Registro -->
-            <div>
-                <span>¿Necesitas una cuenta? </span>
-                <a routerLink="/registro">Registrarse</a>
-            </div>
         </form>
     </div>
 
-    <!-- Botones de acceso rápido -->
-    <div class="quick-access">
-        <button mat-raised-button (click)="inicioRapido('loheb91224@bulatox.com', 'Administrador')">
-            <mat-icon>how_to_reg</mat-icon>
-            Administrador
-        </button>
-        <button mat-raised-button (click)="inicioRapido('ninej96929@aqqor.com', 'Especialista')">
-            <mat-icon>how_to_reg</mat-icon>
-            Especialista
-        </button>
-        <button mat-raised-button (click)="inicioRapido('hedan14788@aqqor.com', 'Paciente')">
-            <mat-icon>how_to_reg</mat-icon>
-            Paciente
-        </button>
-    </div>
-</section>
+    <!--------------------------- Right Box ----------------------------->
+    <div class="col-md-3"></div>
+
+</div>

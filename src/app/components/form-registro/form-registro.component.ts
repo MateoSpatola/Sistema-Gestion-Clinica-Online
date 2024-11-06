@@ -5,7 +5,6 @@ import { NotificationService } from '../../services/notification.service';
 import { DatabaseService } from '../../services/database.service';
 import { RouterLink } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
@@ -17,7 +16,6 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
     RouterLink,
     FormsModule,
     MatInputModule,
-    MatButtonModule,
     ReactiveFormsModule,
     MatIconModule,
     MatChipsModule,
@@ -147,6 +145,7 @@ export class FormRegistroComponent {
         
         await this._databaseService.setDocument('usuarios', this.form.value, this.form.value.correo!);
         this.form.reset();
+        this.form.markAsUntouched();
         this._notificationService.closeAlert();
 
         if (this.altaDesdeUnAdmin) {

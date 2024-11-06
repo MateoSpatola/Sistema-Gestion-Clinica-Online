@@ -1,9 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
-import { MatTableModule } from '@angular/material/table';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -11,10 +7,6 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [
     RouterLink,
-    MatTableModule,
-    MatSlideToggleModule,
-    MatButtonModule,
-    MatIconModule
   ],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.css'
@@ -34,7 +26,7 @@ export class UsuariosComponent {
     })
   }
 
-  toggleHabilitado(usuario: any, event: any): void {
+  switchHabilitado(usuario: any, event: any): void {
     const nuevoEstado = event.checked;
     this._databaseService.updateDocument('usuarios', { habilitado: nuevoEstado }, usuario.correo);
   }

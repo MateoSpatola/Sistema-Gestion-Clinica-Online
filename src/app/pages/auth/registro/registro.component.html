@@ -1,30 +1,47 @@
-<div>
-    <button (click)="seleccionarTipoUsuario('Especialista')">
-        Especialista
-    </button>
-    <button (click)="seleccionarTipoUsuario('Paciente')">
-        Paciente
-    </button>
-    @if (adminAutenticado) {
-        <button (click)="seleccionarTipoUsuario('Administrador')">
-            Administrador
-        </button>
-    }
-    
-    @if(tipoUsuarioSeleccionado) {
-        @if(tipoUsuarioSeleccionado == 'Especialista') {
-            <app-form-registro [tipoUsuario]="'Especialista'" [altaDesdeUnAdmin]="adminAutenticado"></app-form-registro>
+<div class="row rounded-4 p-3 m-3 bg-white shadow">
+
+    <!--------------------------- Left Box ----------------------------->
+    <div class="col-lg-2 rounded-4 d-flex justify-content-center align-items-center flex-column bg-primary shadow">
+        <div class="card text-center mt-3 w-100">
+            <div class="card-header fw-bold">
+                Especialista
+            </div>
+            <img src="Especialista.png" alt="Especialista" class="card-img-top p-2" (click)="seleccionarTipoUsuario('Especialista')">
+        </div>
+
+        <div class="card text-center my-3 w-100">
+            <div class="card-header fw-bold">
+                Paciente
+            </div>
+            <img src="Paciente.png" alt="Paciente" class="card-img-top p-2" (click)="seleccionarTipoUsuario('Paciente')">
+        </div>
+
+        @if (adminAutenticado) {
+            <div class="card text-center mb-3 w-100">
+                <div class="card-header fw-bold">
+                    Administrador
+                </div>
+                <img src="Administrador.png" alt="Administrador" class="card-img-top p-2" (click)="seleccionarTipoUsuario('Administrador')">
+            </div>
         }
-        @if(tipoUsuarioSeleccionado == 'Paciente') {
-            <app-form-registro [tipoUsuario]="'Paciente'" [altaDesdeUnAdmin]="adminAutenticado"></app-form-registro>
+    </div>
+
+    <!--------------------------- Right Box ----------------------------->
+    <div class="col-lg-10 px-5 d-flex justify-content-center align-items-center flex-column">
+        @if(tipoUsuarioSeleccionado) {
+            @if(tipoUsuarioSeleccionado == 'Especialista') {
+                <app-form-registro [tipoUsuario]="'Especialista'" [altaDesdeUnAdmin]="adminAutenticado"></app-form-registro>
+            }
+            @if(tipoUsuarioSeleccionado == 'Paciente') {
+                <app-form-registro [tipoUsuario]="'Paciente'" [altaDesdeUnAdmin]="adminAutenticado"></app-form-registro>
+            }
+            @if(tipoUsuarioSeleccionado == 'Administrador') {
+                <app-form-registro [tipoUsuario]="'Administrador'" [altaDesdeUnAdmin]="adminAutenticado"></app-form-registro>
+            }
         }
-        @if(tipoUsuarioSeleccionado == 'Administrador') {
-            <app-form-registro [tipoUsuario]="'Administrador'" [altaDesdeUnAdmin]="adminAutenticado"></app-form-registro>
+        @else {
+            <p class="p-3 m-5 text-dark-emphasis fw-bold bg-light-subtle border border-dark-subtle rounded-3 fs-4 shadow">Seleccione el tipo de usuario que desea registrar.</p>
         }
-    }
-    @else {
-        <p>Seleccione que tipo de usuario desea registrar.</p>
-    }
-    
+    </div>
 
 </div>

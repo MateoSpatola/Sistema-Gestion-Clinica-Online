@@ -1,12 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatDividerModule } from '@angular/material/divider';
 import { Unsubscribe, User } from '@angular/fire/auth';
 
 @Component({
@@ -14,11 +9,7 @@ import { Unsubscribe, User } from '@angular/fire/auth';
   standalone: true,
   imports: [
     RouterLink,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    MatDividerModule
+    RouterLinkActive
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
