@@ -167,9 +167,12 @@ export class SolicitarTurnoComponent {
           especialidad: this.especialidadSeleccionada,
           correoEspecialista: this.correoEspecialistaSeleccionado,
           fechaCompleta: fechaCompleta,
-          estado: 'realizado'
+          estado: 'Pendiente'
         }
-        await this._databaseService.setDocument('turnos', turno);
+        
+        const turnoId = await this._databaseService.setDocument('turnos', turno);
+        await this._databaseService.updateDocument('turnos', { id: turnoId }, turnoId);
+
         this._notificationService.closeAlert();
         this._notificationService.showAlert('¡Turno generado con exito!', 'success', 2000);
         if(this.infoUsuario.tipo == 'Administrador') {

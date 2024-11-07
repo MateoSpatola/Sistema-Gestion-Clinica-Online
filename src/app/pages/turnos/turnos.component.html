@@ -1,0 +1,101 @@
+<div class="container py-4 text-center">
+    <h2 class="text-center bg-dark text-light fw-bold fs-2 m-0 p-2">Listado de turnos</h2>
+
+    <table class="table table-hover table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Paciente</th>
+                <th>Especialista</th>
+                <th>Especialidad</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="table-light">
+            @if(turnos.length > 0) {
+                @for(turno of turnos; track $index) {
+                    <tr>
+                        <td>{{turno.correoPaciente}}</td>
+                        <td>{{turno.correoEspecialista}}</td>
+                        <td>{{turno.especialidad}}</td>
+                        <td>{{turno.fechaCompleta}}</td>
+                        <td>
+                            <span class="badge p-1 w-100 fs-6" [ngClass]="{
+                                'text-bg-secondary': turno.estado == 'Pendiente',
+                                'text-bg-primary': turno.estado == 'Aceptado',
+                                'text-bg-success': turno.estado == 'Realizado',
+                                'text-bg-danger': turno.estado == 'Rechazado' || turno.estado == 'Cancelado',
+                            }">
+                                {{ turno.estado }}
+                            </span>
+                        </td>
+                        
+                        <td>
+                            @if (turno.estado == 'Pendiente') {
+                                <button type="button" class="btn btn-link" data-bs-toggle="modal" [attr.data-bs-target]="'#modal' + turno.id">
+                                    <i class="bi bi-trash-fill text-danger fs-4"></i>
+                                </button>
+                            }
+                            @if (turno.estado == 'Cancelado') {
+                                <button type="button" class="btn btn-link" data-bs-toggle="modal" [attr.data-bs-target]="'#modal' + turno.id">
+                                    <i class="bi bi-patch-question-fill text-info fs-4"></i>
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            @else {
+                <tr>
+                    <td colspan="6" class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </td>
+                </tr>
+                
+            }
+        </tbody>
+    </table>
+
+
+    @for(turno of turnos; track $index) {
+        @if (turno.estado == 'Pendiente') {
+            <div [id]="'modal' + turno.id" class="modal fade" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalLabel">Ingrese el motivo de la cancelación</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea [(ngModel)]="motivoCancelacion" rows="3" class="form-control"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" [disabled]="!motivoCancelacion" data-bs-dismiss="modal" (click)="cancelarTurno(turno.id)">Cancelar turno</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (turno.estado == 'Cancelado') {
+            <div [id]="'modal' + turno.id" class="modal fade" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalLabel">Información acerca de la cancelación</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Detalle:</strong> {{turno.detalleCancelacion}}</p>
+                            <p><strong>Motivo:</strong> {{turno.motivoCancelacion}}</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+</div>

@@ -11,4 +11,5 @@ export const routes: Routes = [
     { path: 'usuarios', loadComponent: () => import('./pages/usuarios/usuarios.component').then((m) => m.UsuariosComponent), canActivate: [noAuthAdminGuard] },
     { path: 'perfil', loadComponent: () => import('./pages/perfil/perfil.component').then((m) => m.PerfilComponent), canActivate: [noAuthGuard] },
     { path: 'solicitar-turno', loadComponent: () => import('./pages/solicitar-turno/solicitar-turno.component').then((m) => m.SolicitarTurnoComponent), canActivate: [noAuthGuard] },
+    { path: 'turnos', loadComponent: () => import('./pages/turnos/turnos.component').then((m) => m.TurnosComponent), canActivate: [noAuthAdminGuard] },
 ];

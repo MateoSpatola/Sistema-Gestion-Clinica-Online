@@ -13,8 +13,12 @@ export class DatabaseService {
   private _firestore = inject(AngularFirestore);
   private _storage = inject(Storage);
 
-  setDocument(collection: string, data: any, documentId?: string): Promise<void> {
-    return this._firestore.collection(collection).doc(documentId || undefined).set(data);
+  setDocument(collection: string, data: any, documentId?: string): Promise<string> {
+    if (documentId) {
+      return this._firestore.collection(collection).doc(documentId).set(data).then(() => documentId);
+    } else {
+      return this._firestore.collection(collection).add(data).then(docRef => docRef.id);
+    }
   }
 
   getDocument(collection: string) {
@@ -34,7 +38,14 @@ export class DatabaseService {
   }
 
   convertTimestampToDate(timestamp: Timestamp): string {
-    return new Date(timestamp.seconds * 1000).toLocaleString('es-ES', {hour12: false});
+    return new Date(timestamp.seconds * 1000).toLocaleString('es-ES', {
+      hour12: true,
+      hour: 'numeric',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
   }
 
   async uploadImage(collection: string, image: Blob, imageName: string): Promise<string> {
