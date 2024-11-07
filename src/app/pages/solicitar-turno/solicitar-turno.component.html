@@ -1,0 +1,66 @@
+<div class="container my-3 p-4 rounded-4 d-flex justify-content-center align-items-center flex-column bg-light">
+
+        <h1 class="display-5 fw-bold">Solicitar Turno</h1>
+
+        @if (infoUsuario) {
+            @if (infoUsuario.tipo == 'Administrador') {
+                <div class="form-group mt-3 w-100">
+                    <label for="paciente">Paciente</label>
+                    <select class="form-control" id="paciente" [(ngModel)]="correoPacienteSeleccionado" required>
+                        <option value="" disabled selected>Seleccione un paciente</option>
+                        @for (paciente of infoPacientes; track $index) {
+                            <option [value]="paciente.correo">{{ paciente.nombre + " " + paciente.apellido }}</option>
+                        }
+                    </select>
+                </div>
+            }
+    
+            <div class="form-group mt-3 w-100">
+                <label for="especialidad">Especialidad</label>
+                <select class="form-control" id="especialidad" [(ngModel)]="especialidadSeleccionada" (change)="cargarEspecialistas()" required>
+                    <option value="" disabled selected>Seleccione una especialidad</option>
+                    @for (especialidad of especialidades; track $index) {
+                        <option [value]="especialidad">{{ especialidad }}</option>
+                    }
+                </select>
+            </div>
+            
+            <div class="form-group mt-3 w-100">
+                <label for="especialista">Especialista</label>
+                <select class="form-control" id="especialista" [(ngModel)]="correoEspecialistaSeleccionado" [disabled]="!especialidadSeleccionada" (change)="cargarFechasDisponibles()" required>
+                    <option value="" disabled selected>Seleccione un especialista</option>
+                    @for (especialista of especialistas; track $index) {
+                        <option [value]="especialista.correo" [disabled]="!especialista.disponibilidad">{{ especialista.nombre + " " + especialista.apellido }}</option>
+                    }
+                </select>
+            </div>
+    
+            <div class="form-group mt-3 w-100">
+                <label for="fecha">Fecha</label>
+                <select class="form-control" id="fecha" [(ngModel)]="fechaSeleccionada" [disabled]="!correoEspecialistaSeleccionado" (change)="cargarHorariosDisponibles()" required>
+                    <option value="" disabled selected>Seleccione una fecha</option>
+                    @for (fecha of fechasDisponibles; track $index) {
+                        <option [value]="fecha">{{ fecha | date: 'dd/MM/yyyy' }}</option>
+                    }
+                </select>
+            </div>
+    
+            <div class="form-group mt-3 w-100">
+                <label for="hora">Hora</label>
+                <select class="form-control" id="hora" [(ngModel)]="horaSeleccionada" [disabled]="!fechaSeleccionada" required>
+                    <option value="" disabled selected>Seleccione una hora</option>
+                    @for (hora of horasDisponibles; track $index) {
+                        <option [value]="hora">{{ hora }}</option>
+                    }
+                </select>
+            </div>
+        }
+        @else {
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        }
+
+        <button class="btn btn-primary btn-lg fw-bold mt-4" (click)="generarTurno()" [disabled]="!horaSeleccionada">Confirmar Turno</button>
+
+</div>

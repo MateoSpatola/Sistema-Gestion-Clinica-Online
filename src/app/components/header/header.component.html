@@ -23,6 +23,11 @@
                         <li class="nav-item">
                             <a class="nav-link mx-lg-2 fw-bold" routerLink="/perfil" routerLinkActive="active">Mi perfil</a>
                         </li>
+                        @if(user.displayName == 'Administrador' || user.displayName == 'Paciente') {
+                            <li class="nav-item">
+                                <a class="nav-link mx-lg-2 fw-bold" routerLink="/solicitar-turno" routerLinkActive="active">Solicitar turno</a>
+                            </li>
+                        }
                     }
                 </ul>
             </div>
