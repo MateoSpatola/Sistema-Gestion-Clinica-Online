@@ -23,9 +23,10 @@
                         <td>
                             <span class="badge p-1 w-100 fs-6" [ngClass]="{
                                 'text-bg-secondary': turno.estado == 'Pendiente',
-                                'text-bg-primary': turno.estado == 'Aceptado',
-                                'text-bg-success': turno.estado == 'Realizado',
-                                'text-bg-danger': turno.estado == 'Rechazado' || turno.estado == 'Cancelado',
+                                'text-bg-success': turno.estado == 'Aceptado',
+                                'text-bg-primary': turno.estado == 'Realizado',
+                                'text-bg-danger': turno.estado == 'Cancelado',
+                                'text-bg-danger-light': turno.estado == 'Rechazado',
                             }">
                                 {{ turno.estado }}
                             </span>
@@ -49,12 +50,9 @@
             @else {
                 <tr>
                     <td colspan="6" class="text-center">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Cargando...</span>
-                        </div>
+                        <p>No se encontraron turnos</p>
                     </td>
                 </tr>
-                
             }
         </tbody>
     </table>
@@ -88,7 +86,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>Detalle:</strong> {{turno.detalleCancelacion}}</p>
+                            <p><strong>Detalle:</strong> Cancelado por {{turno.canceladoPor}}</p>
                             <p><strong>Motivo:</strong> {{turno.motivoCancelacion}}</p>
                         </div>
 

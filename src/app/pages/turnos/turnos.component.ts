@@ -34,7 +34,7 @@ export class TurnosComponent {
   async cancelarTurno(turnoId: string) {
     this._notificationService.showLoadingAlert('Cancelando turno...');
     try {
-      await this._databaseService.updateDocument('turnos', { estado: 'Cancelado', detalleCancelacion: 'Cancelado por administración', motivoCancelacion: this.motivoCancelacion}, turnoId);
+      await this._databaseService.updateDocument('turnos', { estado: 'Cancelado', canceladoPor: 'Administración', motivoCancelacion: this.motivoCancelacion}, turnoId);
       this.motivoCancelacion = '';
       this._notificationService.closeAlert();
       this._notificationService.showAlert('¡Turno cancelado con exito!', 'success', 1000);

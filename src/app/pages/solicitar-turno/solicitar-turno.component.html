@@ -6,7 +6,7 @@
             @if (infoUsuario.tipo == 'Administrador') {
                 <div class="form-group mt-3 w-100">
                     <label for="paciente">Paciente</label>
-                    <select class="form-control" id="paciente" [(ngModel)]="correoPacienteSeleccionado" required>
+                    <select class="form-control" id="paciente" [(ngModel)]="correoPacienteSeleccionado" (change)="seleccionarPaciente()" required>
                         <option value="" disabled selected>Seleccione un paciente</option>
                         @for (paciente of infoPacientes; track $index) {
                             <option [value]="paciente.correo">{{ paciente.nombre + " " + paciente.apellido }}</option>

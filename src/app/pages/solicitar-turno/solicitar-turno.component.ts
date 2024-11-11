@@ -35,13 +35,14 @@ export class SolicitarTurnoComponent {
   protected horasDisponibles: string[] = [];
   
   protected correoPacienteSeleccionado: string = '';
+  protected nombrePacienteSeleccionado: string = '';
   protected especialidadSeleccionada: string = '';
   protected correoEspecialistaSeleccionado: string = '';
   protected infoEspecialistaSeleccionado!: Usuario | null;
   protected fechaSeleccionada: string = '';
   protected horaSeleccionada: string = '';
 
-  
+
   async ngOnInit() {
     let user = this._authService.auth.currentUser;
     if (user) {
@@ -49,6 +50,7 @@ export class SolicitarTurnoComponent {
     }
     if (this.infoUsuario?.tipo == 'Paciente') {
       this.correoPacienteSeleccionado = this.infoUsuario.correo;
+      this.nombrePacienteSeleccionado = this.infoUsuario.nombre + ' ' + this.infoUsuario.apellido;
     }
 
     this._databaseService.getDocument('usuarios').subscribe(response => {
@@ -70,9 +72,14 @@ export class SolicitarTurnoComponent {
     });
   }
 
+  async seleccionarPaciente() {
+    let paciente = await this._databaseService.getDocumentById('usuarios', this.correoPacienteSeleccionado);
+    this.correoPacienteSeleccionado = this.correoPacienteSeleccionado;
+    this.nombrePacienteSeleccionado = paciente.nombre + ' ' + paciente.apellido;
+  }
+
 
   cargarEspecialistas(): void {
-    console.log(this.especialidadSeleccionada);
     this.especialistas = [];
     this.correoEspecialistaSeleccionado = "";
     this.infoEspecialistaSeleccionado = null;
@@ -173,8 +180,10 @@ export class SolicitarTurnoComponent {
         const fechaCompleta = this.combinarFechaYHora(this.fechaSeleccionada, this.horaSeleccionada);
         let turno: Turno = {
           correoPaciente: this.correoPacienteSeleccionado,
+          nombrePaciente: this.nombrePacienteSeleccionado,
           especialidad: this.especialidadSeleccionada,
           correoEspecialista: this.correoEspecialistaSeleccionado,
+          nombreEspecialista: this.infoEspecialistaSeleccionado?.nombre + ' ' + this.infoEspecialistaSeleccionado?.apellido,
           fechaCompleta: fechaCompleta,
           estado: 'Pendiente'
         }
