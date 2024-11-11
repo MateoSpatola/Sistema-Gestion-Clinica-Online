@@ -20,7 +20,7 @@
                 <select class="form-control" id="especialidad" [(ngModel)]="especialidadSeleccionada" (change)="cargarEspecialistas()" required>
                     <option value="" disabled selected>Seleccione una especialidad</option>
                     @for (especialidad of especialidades; track $index) {
-                        <option [value]="especialidad">{{ especialidad }}</option>
+                        <option [value]="especialidad.nombre">{{ especialidad.nombre }}</option>
                     }
                 </select>
             </div>

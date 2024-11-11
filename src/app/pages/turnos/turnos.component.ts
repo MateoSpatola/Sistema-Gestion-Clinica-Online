@@ -3,6 +3,7 @@ import { DatabaseService } from '../../services/database.service';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
 import { NgClass } from '@angular/common';
+import { Turno } from '../../models/turno';
 
 @Component({
   selector: 'app-turnos',
@@ -17,7 +18,7 @@ import { NgClass } from '@angular/common';
 export class TurnosComponent {
   private _databaseService = inject(DatabaseService);
   private _notificationService= inject(NotificationService);
-  protected turnos: any[] = [];
+  protected turnos: Turno[] = [];
   protected motivoCancelacion: string = '';
 
   ngOnInit() {

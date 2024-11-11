@@ -7,7 +7,9 @@ import { RouterLink } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipsModule, MAT_CHIPS_DEFAULT_OPTIONS } from '@angular/material/chips';
+import { COMMA, SPACE } from '@angular/cdk/keycodes';
+import { Especialidad } from '../../models/especialidad';
 
 @Component({
   selector: 'app-form-registro',
@@ -21,6 +23,14 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
     MatChipsModule,
     MatAutocompleteModule
   ],
+  providers: [
+    {
+      provide: MAT_CHIPS_DEFAULT_OPTIONS,
+      useValue: {
+        separatorKeyCodes: [COMMA, SPACE]
+      }
+    }
+  ],
   templateUrl: './form-registro.component.html',
   styleUrl: './form-registro.component.css'
 })
@@ -33,7 +43,7 @@ export class FormRegistroComponent {
   private _databaseService = inject(DatabaseService);
 
   protected mostrarClave: boolean = false;
-  protected especialidades: string[] = ['Cardiología', 'Dermatología', 'Pediatría', 'Neurología', 'Oncología'];
+  protected especialidades: Especialidad[] = [];
   protected especialidadesSeleccionadas: string[] = [];
   protected especialidadActual: string = '';
   protected imagenPerfil!: Event;
@@ -60,6 +70,12 @@ export class FormRegistroComponent {
     if(this.tipoUsuario) {
       this.form.controls.tipo.setValue(this.tipoUsuario);
     }
+
+    this._databaseService.getDocument('especialidades').subscribe(response => {
+      response.forEach((res: any) => {
+        this.especialidades.push(res);
+      });
+    });
   }
 
   configurarCamposPorTipo(): void {
@@ -82,20 +98,21 @@ export class FormRegistroComponent {
     }
   }
 
-  especialidadesFiltradas(): string[] {
+  especialidadesFiltradas(): Especialidad[] {
     const filtro = this.especialidadActual.toLowerCase();
-    return filtro ? this.especialidades.filter(e => e.toLowerCase().includes(filtro) && !this.especialidadesSeleccionadas.includes(e)) : this.especialidades.slice();
+    return filtro ? this.especialidades.filter(e => e.nombre.toLowerCase().includes(filtro) && !this.especialidadesSeleccionadas.includes(e.nombre)) : this.especialidades.slice();
   }
 
   agregarEspecialidad(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (value && !this.especialidadesSeleccionadas.includes(value)) {
-      this.especialidadesSeleccionadas.push(value);
+    const especialidad = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+    if (especialidad && !this.especialidadesSeleccionadas.includes(especialidad)) {
+      this.especialidadesSeleccionadas.push(especialidad);
     }
     event.chipInput!.clear();
     this.especialidadActual = '';
   }
-
+  
   eliminarEspecialidad(especialidad: string): void {
     const index = this.especialidadesSeleccionadas.indexOf(especialidad);
     if (index >= 0) {
@@ -144,6 +161,18 @@ export class FormRegistroComponent {
         }
         
         await this._databaseService.setDocument('usuarios', this.form.value, this.form.value.correo!);
+
+        const especialidadesParaAgregar = this.especialidadesSeleccionadas.filter((especialidad) => {
+          return !this.especialidades.some(e => e.nombre == especialidad);
+        });
+
+        for (const especialidad of especialidadesParaAgregar) {
+          await this._databaseService.setDocument('especialidades', { 
+            nombre: especialidad, 
+            imagen: 'https://firebasestorage.googleapis.com/v0/b/spatolamateo-clinicaonline.appspot.com/o/especialidades%2Fdefault.png?alt=media&token=ad876f92-3dd7-42ba-9944-e541b73cf103' 
+          }, especialidad);
+        }
+
         this.form.reset();
         this.form.markAsUntouched();
         this._notificationService.closeAlert();

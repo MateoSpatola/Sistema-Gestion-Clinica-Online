@@ -101,7 +101,7 @@
                     />
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="especialidadSeleccionada($event)">
                         @for (especialidad of especialidadesFiltradas(); track especialidad) {
-                            <mat-option [value]="especialidad">{{especialidad}}</mat-option>
+                            <mat-option [value]="especialidad.nombre">{{especialidad.nombre}}</mat-option>
                         }
                     </mat-autocomplete>
                     @if (form.controls.especialidades.hasError('required')) {
@@ -111,7 +111,6 @@
             </div>
         }
         
-
         <!-- Correo -->
         <div class="col-lg-6">
             <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>

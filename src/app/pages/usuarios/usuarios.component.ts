@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { RouterLink } from '@angular/router';
+import { Usuario } from '../../models/usuario';
 
 @Component({
   selector: 'app-usuarios',
@@ -14,8 +15,7 @@ import { RouterLink } from '@angular/router';
 export class UsuariosComponent {
 
   private _databaseService = inject(DatabaseService);
-  protected usuarios: any[] = [];
-  protected displayedColumns: string[] = ['dni', 'nombre', 'apellido', 'tipo', 'habilitado'];
+  protected usuarios: Usuario[] = [];
 
   ngOnInit() {
     this._databaseService.getDocument('usuarios').subscribe(response => {
@@ -26,7 +26,7 @@ export class UsuariosComponent {
     })
   }
 
-  switchHabilitado(usuario: any, event: any): void {
+  switchHabilitado(usuario: Usuario, event: any): void {
     const nuevoEstado = event.checked;
     this._databaseService.updateDocument('usuarios', { habilitado: nuevoEstado }, usuario.correo);
   }

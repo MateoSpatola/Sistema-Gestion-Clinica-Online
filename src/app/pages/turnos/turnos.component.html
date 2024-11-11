@@ -73,7 +73,7 @@
                             <textarea [(ngModel)]="motivoCancelacion" rows="3" class="form-control"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" [disabled]="!motivoCancelacion" data-bs-dismiss="modal" (click)="cancelarTurno(turno.id)">Cancelar turno</button>
+                            <button type="button" class="btn btn-danger" [disabled]="!motivoCancelacion" data-bs-dismiss="modal" (click)="cancelarTurno(turno.id!)">Cancelar turno</button>
                         </div>
                     </div>
                 </div>

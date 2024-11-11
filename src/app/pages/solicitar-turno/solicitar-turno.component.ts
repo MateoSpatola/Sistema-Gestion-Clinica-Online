@@ -4,6 +4,10 @@ import { DatabaseService } from '../../services/database.service';
 import { NotificationService } from '../../services/notification.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Usuario } from '../../models/usuario';
+import { Dia } from '../../models/dia';
+import { Turno } from '../../models/turno';
+import { Especialidad } from '../../models/especialidad';
 
 @Component({
   selector: 'app-solicitar-turno',
@@ -21,28 +25,29 @@ export class SolicitarTurnoComponent {
   private _databaseService = inject(DatabaseService);
   private _notificationService= inject(NotificationService);
 
-  infoUsuario: any;
+  protected infoUsuario?: Usuario;
 
-  protected infoPacientes: any[] = [];
-  protected infoEspecialistas: any[] = [];
-  protected especialidades: string[] = [];
-  protected especialistas: any[] = [];
+  protected infoPacientes: Usuario[] = [];
+  protected infoEspecialistas: Usuario[] = [];
+  protected especialidades: Especialidad[] = [];
+  protected especialistas: Usuario[] = [];
   protected fechasDisponibles: Date[] = [];
   protected horasDisponibles: string[] = [];
   
   protected correoPacienteSeleccionado: string = '';
   protected especialidadSeleccionada: string = '';
   protected correoEspecialistaSeleccionado: string = '';
-  protected infoEspecialistaSeleccionado: any;
+  protected infoEspecialistaSeleccionado!: Usuario | null;
   protected fechaSeleccionada: string = '';
   protected horaSeleccionada: string = '';
 
+  
   async ngOnInit() {
     let user = this._authService.auth.currentUser;
     if (user) {
       this.infoUsuario = await this._databaseService.getDocumentById('usuarios', user.email!);
     }
-    if (this.infoUsuario.tipo == 'Paciente') {
+    if (this.infoUsuario?.tipo == 'Paciente') {
       this.correoPacienteSeleccionado = this.infoUsuario.correo;
     }
 
@@ -51,20 +56,23 @@ export class SolicitarTurnoComponent {
       response.forEach((res: any) => {
         if(res.tipo == 'Especialista') {
           this.infoEspecialistas.push(res);
-          res.especialidades.forEach((especialidad: string) => {
-            if (!this.especialidades.includes(especialidad)) {
-              this.especialidades.push(especialidad);
-            }
-          });
         }
         else if (res.tipo == 'Paciente') {
           this.infoPacientes.push(res);
         }
       });
-    })
+    });
+
+    this._databaseService.getDocument('especialidades').subscribe(response => {
+      response.forEach((res: any) => {
+        this.especialidades.push(res);
+      });
+    });
   }
 
+
   cargarEspecialistas(): void {
+    console.log(this.especialidadSeleccionada);
     this.especialistas = [];
     this.correoEspecialistaSeleccionado = "";
     this.infoEspecialistaSeleccionado = null;
@@ -74,13 +82,14 @@ export class SolicitarTurnoComponent {
     this.horasDisponibles = [];
     
     this.infoEspecialistas.forEach(especialista => {
-      especialista.especialidades.forEach((especialidad: string) => {
+      especialista.especialidades!.forEach((especialidad: string) => {
         if (this.especialidadSeleccionada == especialidad) {
           this.especialistas.push(especialista);
         }
       });
     });
   }
+
 
   cargarFechasDisponibles(): void {
     this.fechaSeleccionada = "";
@@ -94,7 +103,7 @@ export class SolicitarTurnoComponent {
       }
     })
 
-    const diasQueTrabaja = this.infoEspecialistaSeleccionado!.disponibilidad.filter((dia: any) => dia.trabaja).map((dia: any) => dia.dia);
+    const diasQueTrabaja = this.infoEspecialistaSeleccionado!.disponibilidad!.filter((dia: Dia) => dia.trabaja).map((dia: Dia) => dia.dia);
     const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
     let fecha = new Date();
@@ -120,7 +129,7 @@ export class SolicitarTurnoComponent {
     const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const diaSeleccionado = diasSemana[fecha.getDay()];
 
-    const disponibilidadDelEspecialista = this.infoEspecialistaSeleccionado.disponibilidad.find((dia: any) => dia.dia === diaSeleccionado);
+    const disponibilidadDelEspecialista = this.infoEspecialistaSeleccionado!.disponibilidad!.find((dia: Dia) => dia.dia === diaSeleccionado);
 
     if (disponibilidadDelEspecialista && disponibilidadDelEspecialista.trabaja) {
       this.horasDisponibles = this.obtenerOpcionesDeHorario(disponibilidadDelEspecialista.inicio, disponibilidadDelEspecialista.fin);
@@ -162,7 +171,7 @@ export class SolicitarTurnoComponent {
       this._notificationService.showLoadingAlert('Generando nuevo turno...');
       try {
         const fechaCompleta = this.combinarFechaYHora(this.fechaSeleccionada, this.horaSeleccionada);
-        let turno: any = {
+        let turno: Turno = {
           correoPaciente: this.correoPacienteSeleccionado,
           especialidad: this.especialidadSeleccionada,
           correoEspecialista: this.correoEspecialistaSeleccionado,
@@ -175,7 +184,7 @@ export class SolicitarTurnoComponent {
 
         this._notificationService.closeAlert();
         this._notificationService.showAlert('¡Turno generado con exito!', 'success', 2000);
-        if(this.infoUsuario.tipo == 'Administrador') {
+        if(this.infoUsuario!.tipo == 'Administrador') {
           this._notificationService.routerLink('/turnos');
         }
         else {

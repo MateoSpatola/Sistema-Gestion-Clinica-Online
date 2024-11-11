@@ -3,6 +3,8 @@ import { AuthService } from '../../services/auth.service';
 import { DatabaseService } from '../../services/database.service';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
+import { Usuario } from '../../models/usuario';
+import { Dia } from '../../models/dia';
 
 @Component({
   selector: 'app-perfil',
@@ -19,10 +21,10 @@ export class PerfilComponent {
   private _databaseService = inject(DatabaseService);
   private _notificationService= inject(NotificationService);
 
-  infoUsuario: any;
-  modificarHorarios: boolean = false;
+  protected infoUsuario?: Usuario;
+  protected modificarHorarios: boolean = false;
 
-  dias: any[] = [
+  dias: Dia[] = [
     { dia: 'Lunes', trabaja: false, inicio: '', fin: '' },
     { dia: 'Martes', trabaja: false, inicio: '', fin: '' },
     { dia: 'Miércoles', trabaja: false, inicio: '', fin: '' },
@@ -35,15 +37,15 @@ export class PerfilComponent {
     let user = this._authService.auth.currentUser;
     if (user) {
       this.infoUsuario = await this._databaseService.getDocumentById('usuarios', user.email!);
-      if(this.infoUsuario.disponibilidad) {
+      if(this.infoUsuario?.disponibilidad) {
         this.dias = this.infoUsuario.disponibilidad;
       }
     }
   }
 
-  obtenerOpcionesDeHorario(dia: any, esInicio: boolean, inicioSeleccionado?: string): string[] {
+  obtenerOpcionesDeHorario(dia: Dia, esInicio: boolean, inicioSeleccionado?: string): string[] {
     let inicio = 8;
-    let fin = dia.nombre == 'Sábado' ? 14 : 19;
+    let fin = dia.dia == 'Sábado' ? 14 : 19;
     const opciones: string[] = [];
 
     for (let hora = inicio; hora <= fin; hora++) {
@@ -64,17 +66,17 @@ export class PerfilComponent {
     return opciones;
   }
 
-  cambiarDisponibilidad(dia: any) {
+  cambiarDisponibilidad(dia: Dia) {
     dia.inicio = '';
     dia.fin = '';
   }
 
-  actualizarFin(dia: any) {
+  actualizarFin(dia: Dia) {
     dia.fin = '';
   }
 
   esFormularioValido(): boolean {
-    return this.dias.every(dia => {
+    return this.dias.every((dia: Dia) => {
       if (dia.trabaja) {
         return dia.inicio && dia.fin;
       }
@@ -86,7 +88,7 @@ export class PerfilComponent {
     if (this.esFormularioValido()) {
       this._notificationService.showLoadingAlert('Guardando horarios...');
       try {
-        await this._databaseService.updateDocument('usuarios', { disponibilidad: this.dias }, this.infoUsuario.correo);
+        await this._databaseService.updateDocument('usuarios', { disponibilidad: this.dias }, this.infoUsuario!.correo);
         this._notificationService.closeAlert();
         this._notificationService.showAlert('¡Horarios guardados con exito!', 'success', 2000);
         this.modificarHorarios = false;
