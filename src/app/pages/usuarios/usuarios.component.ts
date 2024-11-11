@@ -27,7 +27,7 @@ export class UsuariosComponent {
   }
 
   switchHabilitado(usuario: Usuario, event: any): void {
-    const nuevoEstado = event.checked;
+    const nuevoEstado = event.target.checked;
     this._databaseService.updateDocument('usuarios', { habilitado: nuevoEstado }, usuario.correo);
   }
 
