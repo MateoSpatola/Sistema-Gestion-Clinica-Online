@@ -20,8 +20,10 @@
         </p>
     </div>
 
-    <div class="text-center">
-        <button routerLink="/ingreso" class="btn btn-dark btn-lg fw-bold me-3">Iniciar sesión</button>
-        <button routerLink="/registro" class="btn btn-outline-dark btn-lg fw-bold">Registrarse</button>
-    </div>
+    @if (!this.user) {
+        <div class="text-center">
+            <button routerLink="/ingreso" class="btn btn-dark btn-lg fw-bold me-3">Iniciar sesión</button>
+            <button routerLink="/registro" class="btn btn-outline-dark btn-lg fw-bold">Registrarse</button>
+        </div>
+    }
 </main>
