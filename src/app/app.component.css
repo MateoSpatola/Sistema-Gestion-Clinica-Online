@@ -1,6 +1,7 @@
 .hero-section {
     background: url('../../public/fondo.jpg') no-repeat center;
     background-size: cover;
+    background-attachment: fixed;
     width: 100%;
     position: relative;
     display: flex;
