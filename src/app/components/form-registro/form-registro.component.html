@@ -182,6 +182,14 @@
             </div>
         }
 
+        <!-- reCAPTCHA -->
+        <div class="recaptcha col-12 d-flex justify-content-center align-items-center flex-column">
+            <re-captcha siteKey="6Ld01X0qAAAAANrD8PT4Bxg6atWuFPK_8vMKFonV" [formControl]="form.controls.recaptcha"></re-captcha>
+            @if (form.controls.recaptcha.hasError('required') && form.controls.recaptcha.touched) {
+                <mat-error>La validación reCAPTCHA es <strong>requerida</strong></mat-error>
+            }
+        </div>
+
         <!-- Botón de registro -->
         <div class="col-12 mt-3">
             <button type="submit" class="btn btn-lg btn-primary w-100 shadow">

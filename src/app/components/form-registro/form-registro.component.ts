@@ -10,6 +10,7 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { MatChipInputEvent, MatChipsModule, MAT_CHIPS_DEFAULT_OPTIONS } from '@angular/material/chips';
 import { COMMA, SPACE } from '@angular/cdk/keycodes';
 import { Especialidad } from '../../models/especialidad';
+import { RecaptchaModule, RecaptchaFormsModule } from "ng-recaptcha";
 
 @Component({
   selector: 'app-form-registro',
@@ -21,7 +22,9 @@ import { Especialidad } from '../../models/especialidad';
     ReactiveFormsModule,
     MatIconModule,
     MatChipsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   providers: [
     {
@@ -61,7 +64,8 @@ export class FormRegistroComponent {
     correo: new FormControl('', [Validators.required, Validators.email]),
     clave: new FormControl('', [Validators.required, Validators.minLength(8)]),
     imagenPerfil: new FormControl('', [Validators.required]),
-    imagenPortada: new FormControl('', [Validators.required])
+    imagenPortada: new FormControl('', [Validators.required]),
+    recaptcha: new FormControl('', [Validators.required])
   })
 
 
