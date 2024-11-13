@@ -1,5 +1,9 @@
 <div class="container py-4 text-center">
-    <h2 class="text-center bg-dark text-light fw-bold fs-2 m-0 p-2">Listado de turnos</h2>
+    <h2 class="text-center bg-dark text-light fw-bold fs-2 m-0 p-3">Listado de turnos</h2>
+
+    <div class="px-3 pb-3 bg-dark">
+        <input type="text" class="form-control" [(ngModel)]="filtro" placeholder="Buscar" (keyup)="filtrarTurnos()"/>
+    </div>
 
     <table class="table table-hover table-bordered align-middle">
         <thead class="table-dark">
@@ -13,11 +17,11 @@
         </thead>
         <tbody class="table-light">
             @if(turnos.length > 0) {
-                @for(turno of turnos; track $index) {
+                @for(turno of turnosFiltrados; track $index) {
                     <tr>
                         <td>{{ infoUsuario?.tipo == 'Paciente' ? turno.nombreEspecialista : turno.nombrePaciente }}</td>
-                        <td>{{turno.especialidad}}</td>
-                        <td>{{turno.fechaCompleta}}</td>
+                        <td>{{ turno.especialidad }}</td>
+                        <td>{{ turno.fechaCompleta | date: 'dd/MM/yyyy - hh:mm a' }}</td>
                         <td>
                             <span class="badge p-1 w-100 fs-6" [ngClass]="{
                                 'text-bg-secondary': turno.estado == 'Pendiente',

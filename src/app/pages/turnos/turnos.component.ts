@@ -23,6 +23,9 @@ export class TurnosComponent {
   protected turnos: Turno[] = [];
   protected motivoCancelacion: string = '';
 
+  protected turnosFiltrados: Turno[] = [];
+  protected filtro: string = '';
+
   ngOnInit() {
     this._databaseService.getDocument('turnos').subscribe(response => {
       this.turnos = [];
@@ -30,6 +33,7 @@ export class TurnosComponent {
         res.fechaCompleta = this._databaseService.convertTimestampToDate(res.fechaCompleta);
         this.turnos.push(res);
       });
+      this.turnosFiltrados = this.turnos;
     })
   }
 
@@ -44,6 +48,20 @@ export class TurnosComponent {
     catch (error: any) {
       this._notificationService.closeAlert();
       this._notificationService.showAlert('Error inesperado: ' + error.code, 'error', 2000);
+    }
+  }
+
+  filtrarTurnos() {
+    if (!this.filtro) {
+      this.turnosFiltrados = this.turnos;
+    }
+    else {
+      this.filtro.toLowerCase();
+      this.turnosFiltrados = this.turnos.filter(turno =>
+        turno.especialidad.toLowerCase().includes(this.filtro) ||
+        turno.nombreEspecialista.toLowerCase().includes(this.filtro)||
+        turno.nombrePaciente.toLowerCase().includes(this.filtro)
+      );
     }
   }
 

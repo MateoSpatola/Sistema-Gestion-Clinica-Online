@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Turno } from '../../models/turno';
 import { Usuario } from '../../models/usuario';
 import { AuthService } from '../../services/auth.service';
@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [
     FormsModule,
+    CommonModule,
     NgClass
   ],
   templateUrl: './mis-turnos.component.html',
@@ -30,9 +31,11 @@ export class MisTurnosComponent {
   protected calificacion: string = '';
   protected motivoRechazo: string = '';
   protected resenia: string = '';
+  
+  protected turnosFiltrados: Turno[] = [];
+  protected filtro: string = '';
 
   async ngOnInit() {
-
     let user = this._authService.auth.currentUser;
     if (user) {
       this.infoUsuario = await this._databaseService.getDocumentById('usuarios', user.email!);
@@ -46,6 +49,7 @@ export class MisTurnosComponent {
           this.turnos.push(res);
         }
       });
+      this.turnosFiltrados = this.turnos;
     })
   }
 
@@ -129,6 +133,27 @@ export class MisTurnosComponent {
     catch (error: any) {
       this._notificationService.closeAlert();
       this._notificationService.showAlert('Error inesperado: ' + error.code, 'error', 2000);
+    }
+  }
+
+  filtrarTurnos() {
+    if (!this.filtro) {
+      this.turnosFiltrados = this.turnos;
+    }
+    else {
+      this.filtro.toLowerCase();
+      if (this.infoUsuario?.tipo == 'Especialista') {
+        this.turnosFiltrados = this.turnos.filter(turno =>
+          turno.especialidad.toLowerCase().includes(this.filtro) ||
+          turno.nombrePaciente.toLowerCase().includes(this.filtro)
+        );
+      }
+      else {
+        this.turnosFiltrados = this.turnos.filter(turno =>
+          turno.especialidad.toLowerCase().includes(this.filtro) ||
+          turno.nombreEspecialista.toLowerCase().includes(this.filtro)
+        );
+      }
     }
   }
 }
