@@ -47,10 +47,6 @@ export class SolicitarTurnoComponent {
     if (user) {
       this.infoUsuario = await this._databaseService.getDocumentById('usuarios', user.email!);
     }
-    if (this.infoUsuario?.tipo == 'Paciente') {
-      // this.correoPacienteSeleccionado = this.infoUsuario.correo;
-      // this.nombrePacienteSeleccionado = this.infoUsuario.nombre + ' ' + this.infoUsuario.apellido;
-    }
 
     this._databaseService.getDocument('usuarios').subscribe(response => {
       this.especialistas = [];
@@ -59,10 +55,18 @@ export class SolicitarTurnoComponent {
           this.especialistas.push(res);
         }
         else if (res.tipo == 'Paciente') {
-          this.pacientes.push(res);
+          if (this.infoUsuario?.tipo == 'Paciente') {
+            if (res.correo == this.infoUsuario?.correo) {
+              this.pacienteSeleccionado = res;
+            }
+          }
+          else {
+            this.pacientes.push(res);
+          }
         }
       });
     });
+
 
     this._databaseService.getDocument('especialidades').subscribe(response => {
       response.forEach((res: any) => {
