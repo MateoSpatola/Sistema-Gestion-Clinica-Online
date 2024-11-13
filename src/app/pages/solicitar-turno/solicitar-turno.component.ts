@@ -27,20 +27,19 @@ export class SolicitarTurnoComponent {
 
   protected infoUsuario?: Usuario;
 
-  protected infoPacientes: Usuario[] = [];
-  protected infoEspecialistas: Usuario[] = [];
+  protected pacientes: Usuario[] = [];
   protected especialidades: Especialidad[] = [];
   protected especialistas: Usuario[] = [];
+  protected especialistasDisponibles: Usuario[] = [];
   protected fechasDisponibles: Date[] = [];
-  protected horasDisponibles: string[] = [];
-  
-  protected correoPacienteSeleccionado: string = '';
-  protected nombrePacienteSeleccionado: string = '';
-  protected especialidadSeleccionada: string = '';
-  protected correoEspecialistaSeleccionado: string = '';
-  protected infoEspecialistaSeleccionado!: Usuario | null;
-  protected fechaSeleccionada: string = '';
-  protected horaSeleccionada: string = '';
+  protected horariosDisponibles: { horario: Date, disponible: boolean }[] = [];
+  protected turnos: Turno[] = [];
+
+  protected pacienteSeleccionado?: Usuario;
+  protected especialidadSeleccionada?: Especialidad;
+  protected especialistaSeleccionado?: Usuario;
+  protected fechaSeleccionada?: Date;
+  protected fechaYHorarioSeleccionado?: Date;
 
 
   async ngOnInit() {
@@ -49,18 +48,18 @@ export class SolicitarTurnoComponent {
       this.infoUsuario = await this._databaseService.getDocumentById('usuarios', user.email!);
     }
     if (this.infoUsuario?.tipo == 'Paciente') {
-      this.correoPacienteSeleccionado = this.infoUsuario.correo;
-      this.nombrePacienteSeleccionado = this.infoUsuario.nombre + ' ' + this.infoUsuario.apellido;
+      // this.correoPacienteSeleccionado = this.infoUsuario.correo;
+      // this.nombrePacienteSeleccionado = this.infoUsuario.nombre + ' ' + this.infoUsuario.apellido;
     }
 
     this._databaseService.getDocument('usuarios').subscribe(response => {
-      this.infoEspecialistas = [];
+      this.especialistas = [];
       response.forEach((res: any) => {
         if(res.tipo == 'Especialista') {
-          this.infoEspecialistas.push(res);
+          this.especialistas.push(res);
         }
         else if (res.tipo == 'Paciente') {
-          this.infoPacientes.push(res);
+          this.pacientes.push(res);
         }
       });
     });
@@ -70,47 +69,61 @@ export class SolicitarTurnoComponent {
         this.especialidades.push(res);
       });
     });
-  }
 
-  async seleccionarPaciente() {
-    let paciente = await this._databaseService.getDocumentById('usuarios', this.correoPacienteSeleccionado);
-    this.correoPacienteSeleccionado = this.correoPacienteSeleccionado;
-    this.nombrePacienteSeleccionado = paciente.nombre + ' ' + paciente.apellido;
-  }
-
-
-  cargarEspecialistas(): void {
-    this.especialistas = [];
-    this.correoEspecialistaSeleccionado = "";
-    this.infoEspecialistaSeleccionado = null;
-    this.fechaSeleccionada = "";
-    this.fechasDisponibles = [];
-    this.horaSeleccionada = "";
-    this.horasDisponibles = [];
-    
-    this.infoEspecialistas.forEach(especialista => {
-      especialista.especialidades!.forEach((especialidad: string) => {
-        if (this.especialidadSeleccionada == especialidad) {
-          this.especialistas.push(especialista);
-        }
+    this._databaseService.getDocument('turnos').subscribe(response => {
+      response.forEach((res: any) => {
+        console.log(res.fechaCompleta);
+        res.fechaCompleta = this._databaseService.convertTimestampToDate(res.fechaCompleta);
+        this.turnos.push(res);
+        console.log(res.fechaCompleta);
       });
     });
   }
 
 
-  cargarFechasDisponibles(): void {
-    this.fechaSeleccionada = "";
+  seleccionarPaciente(paciente: Usuario) {
+    this.especialidadSeleccionada = undefined;
+    this.especialistaSeleccionado = undefined;
+    this.especialistasDisponibles = [];
+    this.fechaSeleccionada = undefined;
     this.fechasDisponibles = [];
-    this.horaSeleccionada = "";
-    this.horasDisponibles = [];
+    this.fechaYHorarioSeleccionado = undefined;
+    this.horariosDisponibles = [];
+    this.pacienteSeleccionado = paciente;
+  }
 
-    this.infoEspecialistas.forEach(especialista => {
-      if(this.correoEspecialistaSeleccionado == especialista.correo) {
-        this.infoEspecialistaSeleccionado = especialista;
-      }
-    })
+  seleccionarEspecialidad(especialidad: Especialidad) {
+    this.especialidadSeleccionada = especialidad;
+    this.cargarEspecialistasDisponibles();
+  }
 
-    const diasQueTrabaja = this.infoEspecialistaSeleccionado!.disponibilidad!.filter((dia: Dia) => dia.trabaja).map((dia: Dia) => dia.dia);
+  cargarEspecialistasDisponibles() {
+    this.especialistaSeleccionado = undefined;
+    this.especialistasDisponibles = [];
+    this.fechaSeleccionada = undefined;
+    this.fechasDisponibles = [];
+    this.fechaYHorarioSeleccionado = undefined;
+    this.horariosDisponibles = [];
+    this.especialistas.forEach(especialista => {
+      especialista.especialidades!.forEach((especialidad: string) => {
+        if (this.especialidadSeleccionada?.nombre == especialidad) {
+          this.especialistasDisponibles.push(especialista);
+        }
+      });
+    });
+  }
+
+  seleccionarEspecialista(especialista: Usuario) {
+    this.especialistaSeleccionado = especialista;
+    this.cargarFechasDisponibles();
+  }
+
+  cargarFechasDisponibles(): void {
+    this.fechaSeleccionada = undefined;
+    this.fechasDisponibles = [];
+    this.fechaYHorarioSeleccionado = undefined;
+    this.horariosDisponibles = [];
+    const diasQueTrabaja = this.especialistaSeleccionado!.disponibilidad!.filter((dia: Dia) => dia.trabaja).map((dia: Dia) => dia.dia);
     const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
     let fecha = new Date();
@@ -120,7 +133,7 @@ export class SolicitarTurnoComponent {
     while (contador < 15) {
       fecha.setDate(fecha.getDate() + 1);
       const nombreDia = diasSemana[fecha.getDay()];
-      if (diasQueTrabaja.includes(nombreDia)) {
+      if (diasQueTrabaja!.includes(nombreDia)) {
         const fechaDisponible = new Date(fecha);
         this.fechasDisponibles.push(fechaDisponible);
       }
@@ -128,63 +141,69 @@ export class SolicitarTurnoComponent {
     }
   }
 
+  seleccionarFecha(fecha: Date) {
+    this.fechaSeleccionada = fecha;
+    this.cargarHorariosDisponibles();
+  }
+
 
   cargarHorariosDisponibles(): void {
-    this.horaSeleccionada = "";
-    this.horasDisponibles = [];
-    const fecha = new Date(this.fechaSeleccionada);
+    this.fechaYHorarioSeleccionado = undefined;
+    this.horariosDisponibles = [];
+    const fecha = new Date(this.fechaSeleccionada!);
     const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const diaSeleccionado = diasSemana[fecha.getDay()];
 
-    const disponibilidadDelEspecialista = this.infoEspecialistaSeleccionado!.disponibilidad!.find((dia: Dia) => dia.dia === diaSeleccionado);
+    const disponibilidadDelEspecialista = this.especialistaSeleccionado!.disponibilidad!.find((dia: Dia) => dia.dia === diaSeleccionado);
 
     if (disponibilidadDelEspecialista && disponibilidadDelEspecialista.trabaja) {
-      this.horasDisponibles = this.obtenerOpcionesDeHorario(disponibilidadDelEspecialista.inicio, disponibilidadDelEspecialista.fin);
+      this.horariosDisponibles = this.obtenerOpcionesDeHorario(disponibilidadDelEspecialista.inicio, disponibilidadDelEspecialista.fin);
     }
   }
 
 
-  obtenerOpcionesDeHorario(inicio: string, fin: string): string[] {
-    const opciones: string[] = [];
+  obtenerOpcionesDeHorario(inicio: string, fin: string): { horario: Date, disponible: boolean }[] {
+    const opciones: { horario: Date, disponible: boolean }[] = [];
     const [inicioHora, inicioMinutos] = inicio.split(':').map(Number);
     const [finHora, finMinutos] = fin.split(':').map(Number);
 
-    const fechaInicio = new Date(this.fechaSeleccionada);
+    const fechaInicio = new Date(this.fechaSeleccionada!);
     fechaInicio.setHours(inicioHora, inicioMinutos, 0, 0);
 
-    const fechaFin = new Date(this.fechaSeleccionada);
+    const fechaFin = new Date(this.fechaSeleccionada!);
     fechaFin.setHours(finHora, finMinutos, 0, 0);
 
-    let opcionHora = fechaInicio;
-    while (opcionHora <= fechaFin) {
-      const horaFormateada = `${opcionHora.getHours()}:${opcionHora.getMinutes() < 10 ? '0' + opcionHora.getMinutes() : opcionHora.getMinutes()}`;
-      opciones.push(horaFormateada);
-      opcionHora = new Date(opcionHora.getTime() + 30 * 60 * 1000);
+    let opcionHorario = fechaInicio;
+    while (opcionHorario <= fechaFin) {
+      const disponible = !this.turnos.some(turno => {
+        const turnoFecha = turno.fechaCompleta;
+        return turnoFecha.getTime() == opcionHorario.getTime() &&
+            ((turno.correoPaciente == this.pacienteSeleccionado?.correo) ||
+            (turno.correoEspecialista == this.especialistaSeleccionado?.correo)) &&
+            turno.estado !== 'Cancelado';
+      });
+      opciones.push({ horario: opcionHorario, disponible });
+      opcionHorario = new Date(opcionHorario.getTime() + 30 * 60 * 1000);
     }
+
     return opciones;
   }
 
-
-  combinarFechaYHora(fecha: string, hora: string): Date {
-    const [horaSeleccionada, minutosSeleccionados] = hora.split(':').map(Number);
-    const fechaCompleta = new Date(fecha);
-    fechaCompleta.setHours(horaSeleccionada, minutosSeleccionados, 0, 0);
-    return fechaCompleta;
+  seleccionarHorario(horario: Date) {
+    this.fechaYHorarioSeleccionado = horario;
   }
-  
 
   async generarTurno() {
-    if (this.correoPacienteSeleccionado && this.especialidadSeleccionada && this.correoEspecialistaSeleccionado && this.fechaSeleccionada && this.horaSeleccionada) {
+    if (this.pacienteSeleccionado && this.especialidadSeleccionada && this.especialistaSeleccionado && this.fechaSeleccionada && this.fechaYHorarioSeleccionado) {
       this._notificationService.showLoadingAlert('Generando nuevo turno...');
       try {
-        const fechaCompleta = this.combinarFechaYHora(this.fechaSeleccionada, this.horaSeleccionada);
         let turno: Turno = {
-          correoPaciente: this.correoPacienteSeleccionado,
-          nombrePaciente: this.nombrePacienteSeleccionado,
-          especialidad: this.especialidadSeleccionada,
-          correoEspecialista: this.correoEspecialistaSeleccionado,
-          nombreEspecialista: this.infoEspecialistaSeleccionado?.nombre + ' ' + this.infoEspecialistaSeleccionado?.apellido,
-          fechaCompleta: fechaCompleta,
+          correoPaciente: this.pacienteSeleccionado.correo,
+          nombrePaciente: this.pacienteSeleccionado.nombre + ' ' + this.pacienteSeleccionado.apellido,
+          especialidad: this.especialidadSeleccionada.nombre,
+          correoEspecialista: this.especialistaSeleccionado.correo,
+          nombreEspecialista: this.especialistaSeleccionado.nombre + ' ' + this.especialistaSeleccionado.apellido,
+          fechaCompleta: this.fechaYHorarioSeleccionado!,
           estado: 'Pendiente'
         }
         

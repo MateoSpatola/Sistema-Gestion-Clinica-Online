@@ -1,66 +1,96 @@
-<div class="container my-3 p-4 rounded-4 d-flex justify-content-center align-items-center flex-column bg-light">
+<div class="container my-3 p-4 rounded-4 d-flex justify-content-center align-items-center flex-column bg-light text-center">
+    <h1 class="display-5 fw-bold">Solicitar Turno</h1>
 
-        <h1 class="display-5 fw-bold">Solicitar Turno</h1>
-
-        @if (infoUsuario) {
-            @if (infoUsuario.tipo == 'Administrador') {
-                <div class="form-group mt-3 w-100">
-                    <label for="paciente">Paciente</label>
-                    <select class="form-control" id="paciente" [(ngModel)]="correoPacienteSeleccionado" (change)="seleccionarPaciente()" required>
-                        <option value="" disabled selected>Seleccione un paciente</option>
-                        @for (paciente of infoPacientes; track $index) {
-                            <option [value]="paciente.correo">{{ paciente.nombre + " " + paciente.apellido }}</option>
-                        }
-                    </select>
-                </div>
-            }
-    
-            <div class="form-group mt-3 w-100">
-                <label for="especialidad">Especialidad</label>
-                <select class="form-control" id="especialidad" [(ngModel)]="especialidadSeleccionada" (change)="cargarEspecialistas()" required>
-                    <option value="" disabled selected>Seleccione una especialidad</option>
-                    @for (especialidad of especialidades; track $index) {
-                        <option [value]="especialidad.nombre">{{ especialidad.nombre }}</option>
-                    }
-                </select>
-            </div>
-            
-            <div class="form-group mt-3 w-100">
-                <label for="especialista">Especialista</label>
-                <select class="form-control" id="especialista" [(ngModel)]="correoEspecialistaSeleccionado" [disabled]="!especialidadSeleccionada" (change)="cargarFechasDisponibles()" required>
-                    <option value="" disabled selected>Seleccione un especialista</option>
-                    @for (especialista of especialistas; track $index) {
-                        <option [value]="especialista.correo" [disabled]="!especialista.disponibilidad">{{ especialista.nombre + " " + especialista.apellido }}</option>
-                    }
-                </select>
-            </div>
-    
-            <div class="form-group mt-3 w-100">
-                <label for="fecha">Fecha</label>
-                <select class="form-control" id="fecha" [(ngModel)]="fechaSeleccionada" [disabled]="!correoEspecialistaSeleccionado" (change)="cargarHorariosDisponibles()" required>
-                    <option value="" disabled selected>Seleccione una fecha</option>
-                    @for (fecha of fechasDisponibles; track $index) {
-                        <option [value]="fecha">{{ fecha | date: 'dd/MM/yyyy' }}</option>
-                    }
-                </select>
-            </div>
-    
-            <div class="form-group mt-3 w-100">
-                <label for="hora">Hora</label>
-                <select class="form-control" id="hora" [(ngModel)]="horaSeleccionada" [disabled]="!fechaSeleccionada" required>
-                    <option value="" disabled selected>Seleccione una hora</option>
-                    @for (hora of horasDisponibles; track $index) {
-                        <option [value]="hora">{{ hora }}</option>
-                    }
-                </select>
-            </div>
-        }
-        @else {
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Cargando...</span>
+    @if (infoUsuario) {
+        @if (infoUsuario.tipo == 'Administrador' && pacientes.length > 0) {
+            <p class="fs-4 fw-bold mt-3">Seleccione al paciente</p>
+            <div class="d-flex flex-wrap justify-content-center">
+                @for (paciente of pacientes; track $index) {
+                    <div class="seleccionable-circular ms-2 me-2 d-flex flex-column align-items-center justify-content-center"
+                        (click)="seleccionarPaciente(paciente)"
+                        [class.seleccionado]="pacienteSeleccionado == paciente">
+                        <img [src]="paciente.imagenPerfil" alt="Paciente" class="imagen-circular">
+                        <div class="nombre-circular">{{paciente.nombre + ' ' + paciente.apellido}}</div>
+                    </div>
+                }
             </div>
         }
 
-        <button class="btn btn-primary btn-lg fw-bold mt-4" (click)="generarTurno()" [disabled]="!horaSeleccionada">Confirmar Turno</button>
+        @if (pacienteSeleccionado) {
+            <p class="fs-4 fw-bold mt-5">Seleccione la especialidad</p>
+            <div class="d-flex flex-wrap justify-content-center">
+                @for (especialidad of especialidades; track $index) {
+                    <div class="seleccionable-circular ms-2 me-2 d-flex align-items-center justify-content-center"
+                        (click)="seleccionarEspecialidad(especialidad)"
+                        [class.seleccionado]="especialidadSeleccionada == especialidad"
+                        data-bs-toggle="tooltip" [title]="especialidad.nombre">
+                        <img [src]="especialidad.imagen" alt="Especialidad" class="imagen-circular">
+                    </div>
+                }
+            </div>
+        }
 
+        @if (especialidadSeleccionada) {
+            <p class="fs-4 fw-bold mt-5">Seleccione al especialista</p>
+            <div class="d-flex flex-wrap justify-content-center">
+                @for (especialista of especialistasDisponibles; track $index) {
+                    <div class="seleccionable-circular ms-2 me-2 d-flex flex-column align-items-center justify-content-center"
+                        (click)="seleccionarEspecialista(especialista)"
+                        [class.seleccionado]="especialistaSeleccionado == especialista">
+                        <img [src]="especialista.imagenPerfil" alt="Especialista" class="imagen-circular">
+                        <div class="nombre-circular">{{especialista.nombre + ' ' + especialista.apellido}}</div>
+                    </div>
+                }
+                @empty {
+                    <p class="p-3 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+                        En este momento no hay especialistas disponibles para la especialidad seleccionada.
+                    </p>
+                }
+            </div>
+        }
+
+        @if (especialistaSeleccionado) {
+            <p class="fs-4 fw-bold mt-5">Seleccione la fecha</p>
+            <div class="d-flex flex-wrap justify-content-center">
+                @for (fecha of fechasDisponibles; track $index) {
+                    <button class="seleccionable btn btn-outline-primary ms-2 me-2 "
+                        (click)="seleccionarFecha(fecha)"
+                        [class.seleccionado]="fechaSeleccionada == fecha">
+                        {{ fecha | date: 'dd/MM' }}
+                    </button>
+                }
+                @empty {
+                    <p class="p-3 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+                        En este momento no hay fechas disponibles para el especialista seleccionado.
+                    </p>
+                }
+            </div>
+        }
+
+        @if (fechaSeleccionada) {
+            <p class="fs-4 fw-bold mt-5">Seleccione el horario</p>
+            <div class="d-flex flex-wrap justify-content-center">
+                @for (horario of horariosDisponibles; track $index) {
+                    <button class="seleccionable btn btn-outline-primary ms-2 me-2 "
+                        (click)="seleccionarHorario(horario.horario)"
+                        [class.seleccionado]="fechaYHorarioSeleccionado == horario.horario"
+                        [disabled]="!horario.disponible">
+                        {{ horario.horario | date: 'hh:mm a' }}
+                    </button>
+                }
+                @empty {
+                    <p class="p-3 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+                        En este momento no hay horarios disponibles para la fecha seleccionada.
+                    </p>
+                }
+            </div>
+        }
+    }
+    @else {
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    }
+
+    <button class="btn btn-primary btn-lg fw-bold mt-4" (click)="generarTurno()" [disabled]="!fechaYHorarioSeleccionado">Confirmar Turno</button>
 </div>

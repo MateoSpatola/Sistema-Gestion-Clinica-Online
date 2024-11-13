@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../services/notification.service';
 import { NgClass } from '@angular/common';
 import { Turno } from '../../models/turno';
@@ -10,6 +11,7 @@ import { Turno } from '../../models/turno';
   standalone: true,
   imports: [
     FormsModule,
+    CommonModule,
     NgClass
   ],
   templateUrl: './turnos.component.html',

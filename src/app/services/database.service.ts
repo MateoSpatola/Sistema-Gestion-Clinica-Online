@@ -37,15 +37,8 @@ export class DatabaseService {
     return this._firestore.collection(collection).doc(documentId).delete();
   }
 
-  convertTimestampToDate(timestamp: Timestamp): string {
-    return new Date(timestamp.seconds * 1000).toLocaleString('es-ES', {
-      hour12: true,
-      hour: 'numeric',
-      minute: '2-digit',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+  convertTimestampToDate(timestamp: Timestamp): Date {
+    return new Date(timestamp.seconds * 1000);
   }
 
   async uploadImage(collection: string, image: Blob, imageName: string): Promise<string> {
