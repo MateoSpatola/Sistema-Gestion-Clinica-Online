@@ -1,19 +1,25 @@
 import { Component, inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
 import { CommonModule, NgClass } from '@angular/common';
 import { Turno } from '../../models/turno';
 import { Usuario } from '../../models/usuario';
 import { AuthService } from '../../services/auth.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { HistoriaClinica } from '../../models/historiaClinica';
 
 @Component({
   selector: 'app-mis-turnos',
   standalone: true,
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     CommonModule,
-    NgClass
+    NgClass,
+    MatInputModule,
+    MatIconModule
   ],
   templateUrl: './mis-turnos.component.html',
   styleUrl: './mis-turnos.component.css'
@@ -34,6 +40,22 @@ export class MisTurnosComponent {
   
   protected turnosFiltrados: Turno[] = [];
   protected filtro: string = '';
+
+  protected historiaClinica!: HistoriaClinica;
+
+  protected formHistoriaClinica = new FormGroup({
+    altura: new FormControl(null, [Validators.required, Validators.min(0), Validators.max(300)]),
+    peso: new FormControl(null, [Validators.required, Validators.min(0), Validators.max(300)]),
+    temperatura: new FormControl(null, [Validators.required, Validators.min(35), Validators.max(45)]),
+    presionSistolica: new FormControl(null, [Validators.required, Validators.min(50), Validators.max(250)]),
+    presionDiastolica: new FormControl(null, [Validators.required, Validators.min(30), Validators.max(150)]),
+    claveUno: new FormControl(),
+    valorUno: new FormControl(),
+    claveDos: new FormControl(),
+    valorDos: new FormControl(),
+    claveTres: new FormControl(),
+    valorTres: new FormControl(),
+  })
 
   async ngOnInit() {
     let user = this._authService.auth.currentUser;
@@ -122,10 +144,40 @@ export class MisTurnosComponent {
     }
   }
 
+  async generarHistoriaClinica() {
+    if (this.formHistoriaClinica.valid) {
+      
+      const infoAdicional: { [clave: string]: string } = {};
+
+      if (this.formHistoriaClinica.value.claveUno && this.formHistoriaClinica.value.valorUno) {
+        infoAdicional[this.formHistoriaClinica.value.claveUno] = this.formHistoriaClinica.value.valorUno;
+      }
+      if (this.formHistoriaClinica.value.claveDos && this.formHistoriaClinica.value.valorDos) {
+        infoAdicional[this.formHistoriaClinica.value.claveDos] = this.formHistoriaClinica.value.valorDos;
+      }
+      if (this.formHistoriaClinica.value.claveTres && this.formHistoriaClinica.value.valorTres) {
+        infoAdicional[this.formHistoriaClinica.value.claveTres] = this.formHistoriaClinica.value.valorTres;
+      }
+
+      this.historiaClinica = {
+        altura: this.formHistoriaClinica.value.altura ?? 0,
+        peso: this.formHistoriaClinica.value.peso ?? 0,
+        temperatura: this.formHistoriaClinica.value.temperatura ?? 0,
+        presionSistolica: this.formHistoriaClinica.value.presionSistolica ?? 0,
+        presionDiastolica: this.formHistoriaClinica.value.presionDiastolica ?? 0,
+        datosDinamicos: infoAdicional,
+      };
+    }
+    else {
+      this._notificationService.showAlert('Historia clínica inválida', 'error', 2000);
+    }
+  }
+
   async finalizarTurno(turnoId: string) {
     this._notificationService.showLoadingAlert('Finalizando turno...');
     try {
-      await this._databaseService.updateDocument('turnos', { estado: 'Realizado', resenia: this.resenia}, turnoId);
+      await this._databaseService.updateDocument('turnos', { estado: 'Realizado', historiaClinica: this.historiaClinica, resenia: this.resenia }, turnoId);
+
       this.resenia = '';
       this._notificationService.closeAlert();
       this._notificationService.showAlert('¡Turno finalizado con exito!', 'success', 1000);

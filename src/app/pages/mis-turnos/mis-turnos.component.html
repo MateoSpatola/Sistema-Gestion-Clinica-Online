@@ -107,7 +107,7 @@
                                 @if (turno.estado == 'Aceptado') {
                                     <button type="button" class="btn btn-link"
                                     data-bs-toggle="tooltip" title="Finalizar turno"
-                                    data-bs-toggle="modal" [attr.data-bs-target]="'#modalFinalizarTurno' + turno.id">
+                                    data-bs-toggle="modal" [attr.data-bs-target]="'#modalHistoriaClinica' + turno.id">
                                         <i class="bi bi-send-check-fill text-primary fs-4"></i>
                                     </button>
                                 }
@@ -299,6 +299,165 @@
                 </div>
             }
             @if (turno.estado == 'Aceptado') {
+                <div [id]="'modalHistoriaClinica' + turno.id" class="modal fade" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalLabel">Complete la historia clínica del paciente:</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <form [formGroup]="formHistoriaClinica" (ngSubmit)="generarHistoriaClinica()">
+                                <div class="modal-body">
+                                    <div class="row">
+
+                                        <!-- Altura -->
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                                                <mat-icon matPrefix>chevron_right</mat-icon>
+                                                <mat-label>Altura (cm)</mat-label>
+                                                <input matInput type="number" [formControl]="formHistoriaClinica.controls.altura" placeholder="Ingrese la altura">
+                                                @if (formHistoriaClinica.controls.altura.hasError('required')) {
+                                                    <mat-error>La altura es <strong>requerida</strong></mat-error>
+                                                }
+                                                @if (formHistoriaClinica.controls.altura.hasError('min') || formHistoriaClinica.controls.altura.hasError('max')) {
+                                                    <mat-error>Ingrese una altura <strong>válida</strong></mat-error>
+                                                }
+                                            </mat-form-field>
+                                        </div>
+
+                                        <!-- Peso -->
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                                                <mat-icon matPrefix>chevron_right</mat-icon>
+                                                <mat-label>Peso (kg)</mat-label>
+                                                <input matInput type="number" [formControl]="formHistoriaClinica.controls.peso" placeholder="Ingrese el peso">
+                                                @if (formHistoriaClinica.controls.peso.hasError('required')) {
+                                                    <mat-error>El peso es <strong>requerido</strong></mat-error>
+                                                }
+                                                @if (formHistoriaClinica.controls.peso.hasError('min') || formHistoriaClinica.controls.peso.hasError('max')) {
+                                                    <mat-error>Ingrese un peso <strong>válido</strong></mat-error>
+                                                }
+                                            </mat-form-field>
+                                        </div>
+
+                                        <!-- Temperatura -->
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                                                <mat-icon matPrefix>chevron_right</mat-icon>
+                                                <mat-label>Temperatura (°C)</mat-label>
+                                                <input matInput type="number" [formControl]="formHistoriaClinica.controls.temperatura" placeholder="Ingrese la temperatura">
+                                                @if (formHistoriaClinica.controls.temperatura.hasError('required')) {
+                                                    <mat-error>La temperatura es <strong>requerida</strong></mat-error>
+                                                }
+                                                @if (formHistoriaClinica.controls.temperatura.hasError('min') || formHistoriaClinica.controls.temperatura.hasError('max')) {
+                                                    <mat-error>Ingrese una temperatura <strong>válida</strong></mat-error>
+                                                }
+                                            </mat-form-field>
+                                        </div>
+
+                                        <!-- Presión sistólica -->
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                                                <mat-icon matPrefix>chevron_right</mat-icon>
+                                                <mat-label>Presión sistólica (mmHg)</mat-label>
+                                                <input matInput type="number" [formControl]="formHistoriaClinica.controls.presionSistolica" placeholder="Ingrese la presión sistólica">
+                                                @if (formHistoriaClinica.controls.presionSistolica.hasError('required')) {
+                                                    <mat-error>La presión sistólica es <strong>requerida</strong></mat-error>
+                                                }
+                                                @if (formHistoriaClinica.controls.presionSistolica.hasError('min') || formHistoriaClinica.controls.presionSistolica.hasError('max')) {
+                                                    <mat-error>Ingrese una presión sistólica <strong>válida</strong></mat-error>
+                                                }
+                                            </mat-form-field>
+                                        </div>
+
+                                        <!-- Presión diastólica -->
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                                                <mat-icon matPrefix>chevron_right</mat-icon>
+                                                <mat-label>Presión diastólica (mmHg)</mat-label>
+                                                <input matInput type="number" [formControl]="formHistoriaClinica.controls.presionDiastolica" placeholder="Ingrese la presión diastólica">
+                                                @if (formHistoriaClinica.controls.presionDiastolica.hasError('required')) {
+                                                    <mat-error>La presión diastólica es <strong>requerida</strong></mat-error>
+                                                }
+                                                @if (formHistoriaClinica.controls.presionDiastolica.hasError('min') || formHistoriaClinica.controls.presionDiastolica.hasError('max')) {
+                                                    <mat-error>Ingrese una presión diastólica <strong>válida</strong></mat-error>
+                                                }
+                                            </mat-form-field>
+                                        </div>
+
+
+                                        <!-- Datos dinámicos -->
+                                        <div class="accordion col-12" >
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                        Información adicional:
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseOne" class="accordion-collapse collapse" >
+                                                    <div class="accordion-body">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <mat-form-field appearance="outline" floatLabel="always">
+                                                                    <mat-icon matPrefix>chevron_right</mat-icon>
+                                                                    <mat-label>Clave</mat-label>
+                                                                    <input matInput [formControl]="formHistoriaClinica.controls.claveUno" placeholder="Ingrese clave">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <mat-form-field appearance="outline" floatLabel="always">
+                                                                    <mat-icon matPrefix>chevron_right</mat-icon>
+                                                                    <mat-label>Valor</mat-label>
+                                                                    <input matInput [formControl]="formHistoriaClinica.controls.valorUno" placeholder="Ingrese valor">
+                                                                </mat-form-field>
+                                                            </div>
+                    
+                                                            <div class="col-6">
+                                                                <mat-form-field appearance="outline" floatLabel="always">
+                                                                    <mat-icon matPrefix>chevron_right</mat-icon>
+                                                                    <mat-label>Clave</mat-label>
+                                                                    <input matInput [formControl]="formHistoriaClinica.controls.claveDos" placeholder="Ingrese clave">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <mat-form-field appearance="outline" floatLabel="always">
+                                                                    <mat-icon matPrefix>chevron_right</mat-icon>
+                                                                    <mat-label>Valor</mat-label>
+                                                                    <input matInput [formControl]="formHistoriaClinica.controls.valorDos" placeholder="Ingrese valor">
+                                                                </mat-form-field>
+                                                            </div>
+                    
+                                                            <div class="col-6">
+                                                                <mat-form-field appearance="outline" floatLabel="always">
+                                                                    <mat-icon matPrefix>chevron_right</mat-icon>
+                                                                    <mat-label>Clave</mat-label>
+                                                                    <input matInput [formControl]="formHistoriaClinica.controls.claveTres" placeholder="Ingrese clave">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <mat-form-field appearance="outline" floatLabel="always">
+                                                                    <mat-icon matPrefix>chevron_right</mat-icon>
+                                                                    <mat-label>Valor</mat-label>
+                                                                    <input matInput [formControl]="formHistoriaClinica.controls.valorTres" placeholder="Ingrese valor">
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" [disabled]="!formHistoriaClinica.valid"
+                                    data-bs-toggle="modal" [attr.data-bs-target]="'#modalFinalizarTurno' + turno.id">Siguiente</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <div [id]="'modalFinalizarTurno' + turno.id" class="modal fade" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -320,3 +479,4 @@
     }
 
 </div>
+
