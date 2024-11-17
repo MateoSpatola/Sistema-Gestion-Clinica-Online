@@ -76,10 +76,8 @@ export class SolicitarTurnoComponent {
 
     this._databaseService.getDocument('turnos').subscribe(response => {
       response.forEach((res: any) => {
-        console.log(res.fechaCompleta);
         res.fechaCompleta = this._databaseService.convertTimestampToDate(res.fechaCompleta);
         this.turnos.push(res);
-        console.log(res.fechaCompleta);
       });
     });
   }
