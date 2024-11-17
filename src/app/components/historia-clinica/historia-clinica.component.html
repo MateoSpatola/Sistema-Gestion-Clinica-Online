@@ -1,0 +1,79 @@
+<div class="container my-3 px-4 rounded-4 d-flex justify-content-center align-items-center flex-column bg-light">
+
+    <h1 class="display-5 fw-bold m-3">Historia clínica de {{ usuario?.nombre + ' ' + usuario?.apellido }}</h1>
+
+    <button class="p-3 btn btn-info w-100 shadow">
+        <i class="bi bi-download me-2"></i>
+        Descargar historia clínica (*pdf)
+    </button>
+    
+    @if (turnosConHistoriaClinica.length > 0) {
+        <div >
+            @for (turno of turnosConHistoriaClinica; track $index) {
+                <div class="card m-3">
+                    <div class="card-header text-center">
+                        <h4 class="card-title fw-bold">{{ turno.especialidad }}</h4>
+                        <h4 class="card-subtitle fw-bold">{{ turno.fechaCompleta  | date: 'dd/MM/yyyy - hh:mm a' }}</h4>
+                    </div>
+                    <div class="card-body">
+                        @if (usuario?.tipo != 'Especialista') {
+                            <p><strong>Especialista:</strong> {{ turno.nombreEspecialista }}</p>
+                        }
+                        @if (usuario?.tipo != 'Paciente') {
+                            <p><strong>Paciente:</strong> {{ turno.nombrePaciente }}</p>
+                        }
+                        <p><strong>Altura:</strong> {{ turno.historiaClinica?.altura }} cm</p>
+                        <p><strong>Peso:</strong> {{ turno.historiaClinica?.peso }} kg</p>
+                        <p><strong>Temperatura:</strong> {{ turno.historiaClinica?.temperatura }} °C</p>
+                        <p><strong>Presión:</strong> {{ turno.historiaClinica?.presionSistolica + ' / ' + turno.historiaClinica?.presionDiastolica }} mmHg</p>
+            
+                        @if (turno.historiaClinica?.datosDinamicos && objectKeys(turno.historiaClinica!.datosDinamicos).length > 0) {
+                            <div>
+                                @for (key of objectKeys(turno.historiaClinica!.datosDinamicos); track $index) {
+                                    <p><strong>{{ key }}:</strong> {{ turno.historiaClinica!.datosDinamicos[key] }}</p>
+                                }
+                            </div>
+                        }
+                    </div>
+                    @if(verResenia) {
+                        @if (turno.resenia) {
+                            <div class="card-footer">
+                                <button type="button" class="p-3 btn btn-secondary w-100 shadow"
+                                data-bs-toggle="modal" [attr.data-bs-target]="'#modalVerResenia' + turno.id">
+                                    Ver reseña
+                                </button>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
+    @else {
+        <div class="text-center m-3">
+            <p class="p-3 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+                No se encontraron historias clínicas.
+            </p>
+        </div>
+    }
+
+</div>
+
+@for (turno of turnosConHistoriaClinica; track $index) {
+    @if (turno.resenia) {
+        <div [id]="'modalVerResenia' + turno.id" class="modal fade" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Reseña</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{turno.resenia}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+

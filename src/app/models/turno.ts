@@ -1,3 +1,5 @@
+import { HistoriaClinica } from "./historiaClinica";
+
 export interface Turno {
     id?: string;
     fechaCompleta: Date;
@@ -13,4 +15,5 @@ export interface Turno {
     resenia?: string;
     encuesta?: string;
     calificacion?: string;
+    historiaClinica?: HistoriaClinica;
 }
