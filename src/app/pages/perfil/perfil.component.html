@@ -1,6 +1,6 @@
 <main class="container my-3 p-4 rounded-4 d-flex justify-content-center align-items-center flex-column bg-light">
 
-    @if (!modificarHorarios) {
+    @if (!modificarHorarios && !verHistoriaClinica) {
         <div class="m-3">
             <h1 class="display-5 fw-bold">Tu información</h1>
             <div class="card shadow text-center p-3 bg-dark">
@@ -32,11 +32,23 @@
             </div>
         </div>
 
-        @if(infoUsuario && infoUsuario.tipo == 'Especialista') {
-            <button class="btn btn-dark btn-lg fw-bold" (click)="modificarHorarios = true">Mis horarios</button>
+        @if(infoUsuario) {
+            @if(infoUsuario.tipo == 'Especialista') {
+                <button class="btn p-3 btn-dark btn-lg fw-bold w-100" (click)="modificarHorarios = true">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Mis horarios
+                </button>
+            }
+            @else if(infoUsuario.tipo == 'Paciente') {
+                <button class="btn p-3 btn-dark btn-lg fw-bold w-100" (click)="verHistoriaClinica = true">
+                    <i class="bi bi-eye me-2"></i>
+                    Ver mi historia clínica
+                </button>
+            }
+            
         }
     }
-    @else {
+    @else if (modificarHorarios){
         <h2 class="mb-4 fw-bold">Configura tu disponibilidad</h2>
         @for (dia of dias; track $index) {
             <div class="day-container my-3">
@@ -70,6 +82,10 @@
             <button class="btn btn-dark btn-lg fw-bold m-2" (click)="modificarHorarios = false">Cancelar</button>
             <button class="btn btn-primary btn-lg fw-bold m-2" (click)="guardarHorarios()">Guardar</button>
         </div>
+    }
+    @else if (verHistoriaClinica){
+        <button class="btn btn-dark btn-lg fw-bold m-2" (click)="verHistoriaClinica = false">Volver</button>
+        <app-historia-clinica [usuario]="infoUsuario"></app-historia-clinica>
     }
 
 </main>

@@ -5,13 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
 import { Usuario } from '../../models/usuario';
 import { Dia } from '../../models/dia';
+import { HistoriaClinicaComponent } from "../../components/historia-clinica/historia-clinica.component";
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
   imports: [
-    FormsModule
-  ],
+    FormsModule,
+    HistoriaClinicaComponent
+],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'
 })
@@ -23,6 +25,7 @@ export class PerfilComponent {
 
   protected infoUsuario?: Usuario;
   protected modificarHorarios: boolean = false;
+  protected verHistoriaClinica: boolean = false;
 
   dias: Dia[] = [
     { dia: 'Lunes', trabaja: false, inicio: '', fin: '' },
