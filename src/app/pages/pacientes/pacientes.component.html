@@ -1,0 +1,30 @@
+<div class="container m-3 py-4 rounded-4 d-flex justify-content-center align-items-center flex-column bg-light">
+
+    @if (!verHistoriaClinica) {
+        <h1 class="display-5 fw-bold m-3">Listado de pacientes atendidos</h1>
+    
+        @if (pacientesUnicosAtendidos.length > 0) {
+            <div class="d-flex flex-wrap justify-content-center">
+                @for (paciente of pacientesUnicosAtendidos; track $index) {
+                    <div class="seleccionable-circular ms-2 me-2 d-flex flex-column align-items-center justify-content-center" (click)="seleccionarPaciente(paciente)">
+                        <img [src]="paciente.imagenPerfil" alt="Paciente" class="imagen-circular">
+                        <div class="nombre-circular">{{paciente.nombre + ' ' + paciente.apellido}}</div>
+                    </div>
+                }
+            </div>
+        }
+        @else {
+            <div class="text-center m-3">
+                <p class="p-3 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+                    No se encontraron pacientes.
+                </p>
+            </div>
+        }
+        
+    }
+    @else {
+        <button class="btn btn-dark btn-lg fw-bold m-2" (click)="verHistoriaClinica = false">Volver</button>
+        <app-historia-clinica [usuario]="pacienteSeleccionado" [verResenia]="true"></app-historia-clinica>
+    }
+
+</div>

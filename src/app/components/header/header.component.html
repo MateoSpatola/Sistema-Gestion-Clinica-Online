@@ -36,6 +36,11 @@
                                 <a class="nav-link mx-lg-2 fw-bold" routerLink="/mis-turnos" routerLinkActive="active">Mis turnos</a>
                             </li>
                         }
+                        @if(user.displayName == 'Especialista') {
+                            <li class="nav-item">
+                                <a class="nav-link mx-lg-2 fw-bold" routerLink="/pacientes" routerLinkActive="active">Mis pacientes</a>
+                            </li>
+                        }
                     }
                 </ul>
             </div>

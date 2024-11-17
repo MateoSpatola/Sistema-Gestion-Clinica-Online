@@ -1,0 +1,28 @@
+.seleccionable-circular {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.seleccionable-circular:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.imagen-circular {
+    width: 80px;
+    height: 80px;
+    
+}
+
+.nombre-circular {
+    font-weight: bold;
+    font-size: 0.8em;
+}

@@ -13,4 +13,5 @@ export const routes: Routes = [
     { path: 'solicitar-turno', loadComponent: () => import('./pages/solicitar-turno/solicitar-turno.component').then((m) => m.SolicitarTurnoComponent), canActivate: [noAuthGuard] },
     { path: 'turnos', loadComponent: () => import('./pages/turnos/turnos.component').then((m) => m.TurnosComponent), canActivate: [noAuthAdminGuard] },
     { path: 'mis-turnos', loadComponent: () => import('./pages/mis-turnos/mis-turnos.component').then((m) => m.MisTurnosComponent), canActivate: [noAuthGuard] },
+    { path: 'pacientes', loadComponent: () => import('./pages/pacientes/pacientes.component').then((m) => m.PacientesComponent), canActivate: [noAuthGuard] },
 ];
