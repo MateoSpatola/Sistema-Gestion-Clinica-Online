@@ -1,55 +1,66 @@
 <div class="container py-4 text-center">
-  <h2 class="text-center bg-dark text-light fw-bold fs-2 m-0 p-2">Listado de usuarios</h2>
-
-  <table class="table table-hover table-bordered">
-      <thead class="table-dark">
-          <tr>
-            <th>DNI</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Tipo</th>
-            <th>Habilitado</th>
-            <th>Acciones</th>
-          </tr>
-      </thead>
-      <tbody class="table-light">
-          @if(usuarios.length > 0) {
-              @for(usuario of usuarios; track $index) {
-                  <tr>
-                    <td>{{usuario.dni}}</td>
-                    <td>{{usuario.nombre}}</td>
-                    <td>{{usuario.apellido}}</td>
-                    <td>{{usuario.tipo}}</td>
-                    <td>
-                      @if(usuario.tipo == 'Especialista') {
-                        <div class="form-check form-switch d-flex justify-content-center">
-                          <input class="form-check-input" type="checkbox" [checked]="usuario.habilitado" (change)="switchHabilitado(usuario, $event)">
-                        </div>
-                      }
-                      @else {
-                        <i class="bi bi-check-circle"></i>
-                      }
-                    </td>
-                    <td class="text-center">
-                      <button type="button" class="btn btn-link" data-bs-toggle="modal" [attr.data-bs-target]="'#modal' + usuario.correo">
-                        <i class="bi bi-eye text-dark"></i>
-                      </button>
-                    </td>
-                  </tr>
-              }
-          }
-          @else {
+  @if (!verHistoriaClinica) {
+    <h2 class="text-center bg-dark text-light fw-bold fs-2 m-0 p-2">Listado de usuarios</h2>
+  
+    <table class="table table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+              <th>DNI</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Tipo</th>
+              <th>Habilitado</th>
+              <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="table-light">
+            @if(usuarios.length > 0) {
+                @for(usuario of usuarios; track $index) {
+                    <tr>
+                      <td>{{usuario.dni}}</td>
+                      <td>{{usuario.nombre}}</td>
+                      <td>{{usuario.apellido}}</td>
+                      <td>{{usuario.tipo}}</td>
+                      <td>
+                        @if(usuario.tipo == 'Especialista') {
+                          <div class="form-check form-switch d-flex justify-content-center">
+                            <input class="form-check-input" type="checkbox" [checked]="usuario.habilitado" (change)="switchHabilitado(usuario, $event)">
+                          </div>
+                        }
+                        @else {
+                          <i class="bi bi-check-circle"></i>
+                        }
+                      </td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-link" data-bs-toggle="modal" [attr.data-bs-target]="'#modal' + usuario.correo">
+                          <i class="bi bi-eye text-dark"></i>
+                        </button>
+                      </td>
+                    </tr>
+                }
+            }
+            @else {
               <tr>
                   <td colspan="6" class="text-center"><strong>Cargando...</strong></td>
               </tr>
-          }
-      </tbody>
-  </table>
+            }
+        </tbody>
+    </table>
 
-  <button type="submit" class="p-3 btn btn-dark w-100 shadow" routerLink="/registro">
-    <i class="bi bi-person-plus me-2"></i>
-    Registrar nuevo usuario
-  </button>
+    <button class="p-3 btn btn-info w-100 shadow mb-3">
+      <i class="bi bi-download me-2"></i>
+      Descargar datos de los usuarios (*excel)
+    </button>
+  
+    <button class="p-3 btn btn-dark w-100 shadow" routerLink="/registro">
+      <i class="bi bi-person-plus me-2"></i>
+      Registrar nuevo usuario
+    </button>
+  }
+  @else {
+    <button class="btn btn-dark btn-lg fw-bold m-2" (click)="verHistoriaClinica = false">Volver</button>
+    <app-historia-clinica [usuario]="usuarioSeleccionado"></app-historia-clinica>
+  }
 
 
   <!-- Modal de Bootstrap -->
@@ -78,11 +89,20 @@
             @if(usuario.imagenPortada) {
               <p><strong>Imagen Portada:</strong> <img [src]="usuario.imagenPortada" class="ms-2" height="100px"></p>
             }
+            @if(usuario.tipo == 'Paciente') {
+              <button class="btn p-3 btn-info w-100 shadow mb-3">
+                <i class="bi bi-download me-2"></i>
+                Descargar datos de los turnos del usuario (*excel)
+              </button>
+              <button class="btn p-3 btn-dark btn-lg fw-bold w-100" data-bs-dismiss="modal" (click)="mostrarHistoriaClinica(usuario)">
+                <i class="bi bi-eye me-2"></i>
+                Ver historia clínica
+              </button>
+            }
           </div>
         </div>
       </div>
     </div>
-
   }
   
 
