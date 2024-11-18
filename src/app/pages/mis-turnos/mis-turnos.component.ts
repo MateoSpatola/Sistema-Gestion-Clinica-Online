@@ -191,21 +191,44 @@ export class MisTurnosComponent {
   filtrarTurnos() {
     if (!this.filtro) {
       this.turnosFiltrados = this.turnos;
-    }
-    else {
-      this.filtro.toLowerCase();
-      if (this.infoUsuario?.tipo == 'Especialista') {
-        this.turnosFiltrados = this.turnos.filter(turno =>
-          turno.especialidad.toLowerCase().includes(this.filtro) ||
-          turno.nombrePaciente.toLowerCase().includes(this.filtro)
-        );
-      }
-      else {
-        this.turnosFiltrados = this.turnos.filter(turno =>
-          turno.especialidad.toLowerCase().includes(this.filtro) ||
-          turno.nombreEspecialista.toLowerCase().includes(this.filtro)
-        );
-      }
+    } else {
+      const filtro = this.filtro.toLowerCase();
+  
+      this.turnosFiltrados = this.turnos.filter(turno => {
+        const coincideConTurno = [
+          turno.fechaCompleta.toLocaleString(),
+          turno.correoEspecialista,
+          turno.nombreEspecialista,
+          turno.correoPaciente,
+          turno.nombrePaciente,
+          turno.especialidad,
+          turno.estado,
+          turno.motivoCancelacion,
+          turno.motivoRechazo,
+          turno.resenia,
+          turno.encuesta,
+          turno.calificacion
+        ].some(campo => campo?.toLowerCase().includes(filtro));
+  
+        const historiaClinica = turno.historiaClinica;
+        const coincideConHistoriaClinicaFijos = historiaClinica
+          ? [
+              historiaClinica.altura?.toString(),
+              historiaClinica.peso?.toString(),
+              historiaClinica.temperatura?.toString(),
+              historiaClinica.presionSistolica?.toString(),
+              historiaClinica.presionDiastolica?.toString()
+            ].some(campo => campo?.toLowerCase().includes(filtro))
+          : false;
+  
+        const coincideConHistoriaClinicaDinamicos = historiaClinica
+          ? Object.values(historiaClinica.datosDinamicos || {}).some(valor =>
+              valor.toLowerCase().includes(filtro)
+            )
+          : false;
+  
+        return coincideConTurno || coincideConHistoriaClinicaFijos || coincideConHistoriaClinicaDinamicos;
+      });
     }
   }
 }
