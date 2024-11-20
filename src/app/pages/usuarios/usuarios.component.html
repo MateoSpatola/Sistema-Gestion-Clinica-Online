@@ -47,7 +47,7 @@
         </tbody>
     </table>
 
-    <button class="p-3 btn btn-info w-100 shadow mb-3">
+    <button class="p-3 btn btn-info w-100 shadow mb-3" (click)="descargarExcelDatosUsuarios()">
       <i class="bi bi-download me-2"></i>
       Descargar datos de los usuarios (*excel)
     </button>
@@ -90,7 +90,7 @@
               <p><strong>Imagen Portada:</strong> <img [src]="usuario.imagenPortada" class="ms-2" height="100px"></p>
             }
             @if(usuario.tipo == 'Paciente') {
-              <button class="btn p-3 btn-info w-100 shadow mb-3">
+              <button class="btn p-3 btn-info w-100 shadow mb-3" (click)="descargarExcelTurnosUsuario(usuario.correo)">
                 <i class="bi bi-download me-2"></i>
                 Descargar datos de los turnos del usuario (*excel)
               </button>
