@@ -2,14 +2,23 @@
 
     <h1 class="display-5 fw-bold m-3">Historia clínica de {{ usuario?.nombre + ' ' + usuario?.apellido }}</h1>
 
-    <button class="p-3 btn btn-info w-100 shadow">
-        <i class="bi bi-download me-2"></i>
-        Descargar historia clínica (*pdf)
-    </button>
     
-    @if (turnosConHistoriaClinica.length > 0) {
+    @if (turnosConHistoriaClinicaFiltrados.length > 0) {
+
+        <div class="text-center m-0">
+            <span class="fw-bold">Filtrar por especialidad:</span>
+        </div>
+        <div class="btn-group m-0">
+            <button class="btn" [class]="especialidadSeleccionada == '' ? 'btn-secondary' : 'btn-outline-secondary'" (click)="filtrarTurnos('')">Todas</button>
+            @for (especialidad of especialidadesUnicas; track $index) {
+                <button class="btn" [class]="especialidadSeleccionada == especialidad ? 'btn-secondary' : 'btn-outline-secondary'" (click)="filtrarTurnos(especialidad)">
+                    {{ especialidad }}
+                </button>
+            }
+        </div>
+
         <div >
-            @for (turno of turnosConHistoriaClinica; track $index) {
+            @for (turno of turnosConHistoriaClinicaFiltrados; track $index) {
                 <div class="card m-3">
                     <div class="card-header text-center">
                         <h4 class="card-title fw-bold">{{ turno.especialidad }}</h4>
@@ -48,6 +57,11 @@
                 </div>
             }
         </div>
+
+        <button class="p-3 btn btn-info w-100 shadow m-3" (click)="descargarPDFHistoriaClinica()">
+            <i class="bi bi-download me-2"></i>
+            Descargar historia clínica (*pdf)
+        </button>
     }
     @else {
         <div class="text-center m-3">
@@ -59,7 +73,7 @@
 
 </div>
 
-@for (turno of turnosConHistoriaClinica; track $index) {
+@for (turno of turnosConHistoriaClinicaFiltrados; track $index) {
     @if (turno.resenia) {
         <div [id]="'modalVerResenia' + turno.id" class="modal fade" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
