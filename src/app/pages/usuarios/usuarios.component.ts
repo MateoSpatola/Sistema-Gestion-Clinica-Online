@@ -20,7 +20,7 @@ export class UsuariosComponent {
 
   private _databaseService = inject(DatabaseService);
   protected usuarios: Usuario[] = [];
-  protected usuarioSeleccionado!: Usuario;
+  protected pacienteSeleccionado!: Usuario;
   protected verHistoriaClinica: boolean = false;
 
   ngOnInit() {
@@ -38,7 +38,7 @@ export class UsuariosComponent {
   }
 
   mostrarHistoriaClinica(usuario: Usuario) {
-    this.usuarioSeleccionado = usuario;
+    this.pacienteSeleccionado = usuario;
     this.verHistoriaClinica = true;
   }
 

@@ -15,7 +15,8 @@ import jsPDF from 'jspdf';
   styleUrl: './historia-clinica.component.css'
 })
 export class HistoriaClinicaComponent {
-  @Input() usuario?: Usuario;
+  @Input() paciente?: Usuario;
+  @Input() especialista?: Usuario;
   @Input() verResenia: boolean = false;
 
   private _databaseService = inject(DatabaseService);
@@ -30,7 +31,7 @@ export class HistoriaClinicaComponent {
     this._databaseService.getDocument('turnos').subscribe(response => {
       response.forEach((res: any) => {
         if(res.historiaClinica) {
-          if(this.usuario?.correo == res.correoPaciente) {
+          if(this.paciente?.correo == res.correoPaciente) {
             res.fechaCompleta = this._databaseService.convertTimestampToDate(res.fechaCompleta);
             this.turnosConHistoriaClinica.push(res);
             this.especialidadesUnicas.push(res.especialidad);
@@ -38,6 +39,9 @@ export class HistoriaClinicaComponent {
         }
       });
       this.especialidadesUnicas = [...new Set(this.especialidadesUnicas)];
+      if(this.especialista) {
+        this.turnosConHistoriaClinica = this.turnosConHistoriaClinica.filter(turno => turno.correoEspecialista === this.especialista?.correo);
+      }
       this.turnosConHistoriaClinicaFiltrados = this.turnosConHistoriaClinica;
     });
   }
@@ -68,7 +72,7 @@ export class HistoriaClinicaComponent {
 
     pdf.setFontSize(16);
     pdf.setFont('helvetica', 'bold');
-    pdf.text(`Informe de Historia Clínica para ${this.usuario?.nombre + ' ' + this.usuario?.apellido}`, 105, 45, { align: 'center' });
+    pdf.text(`Informe de Historia Clínica para ${this.paciente?.nombre + ' ' + this.paciente?.apellido}`, 105, 45, { align: 'center' });
 
     let yPosition = 65;
     let margen = 70;
@@ -123,7 +127,7 @@ export class HistoriaClinicaComponent {
         yPosition += 10;
     });
 
-    pdf.save(`Informe-historia-clinica-${this.usuario?.nombre + '-' + this.usuario?.apellido}.pdf`);
+    pdf.save(`Informe-historia-clinica-${this.paciente?.nombre + '-' + this.paciente?.apellido}.pdf`);
   }
 
 }

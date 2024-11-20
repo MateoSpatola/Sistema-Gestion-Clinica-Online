@@ -1,11 +1,14 @@
 <div class="container my-3 px-4 rounded-4 d-flex justify-content-center align-items-center flex-column bg-light">
 
-    <h1 class="display-5 fw-bold m-3">Historia clínica de {{ usuario?.nombre + ' ' + usuario?.apellido }}</h1>
+    <h1 class="display-5 fw-bold mt-3">Historia clínica de {{ paciente?.nombre + ' ' + paciente?.apellido }}</h1>
+    @if (especialista) {
+        <h2 class="display-6">con el especialista {{ especialista.nombre + ' ' + especialista.apellido }}</h2>
+    }
 
     
     @if (turnosConHistoriaClinicaFiltrados.length > 0) {
 
-        <div class="text-center m-0">
+        <div class="text-center mt-3">
             <span class="fw-bold">Filtrar por especialidad:</span>
         </div>
         <div class="btn-group m-0">
@@ -25,12 +28,7 @@
                         <h4 class="card-subtitle fw-bold">{{ turno.fechaCompleta  | date: 'dd/MM/yyyy - hh:mm a' }}</h4>
                     </div>
                     <div class="card-body">
-                        @if (usuario?.tipo != 'Especialista') {
-                            <p><strong>Especialista:</strong> {{ turno.nombreEspecialista }}</p>
-                        }
-                        @if (usuario?.tipo != 'Paciente') {
-                            <p><strong>Paciente:</strong> {{ turno.nombrePaciente }}</p>
-                        }
+                        <p><strong>Especialista:</strong> {{ turno.nombreEspecialista }}</p>
                         <p><strong>Altura:</strong> {{ turno.historiaClinica?.altura }} cm</p>
                         <p><strong>Peso:</strong> {{ turno.historiaClinica?.peso }} kg</p>
                         <p><strong>Temperatura:</strong> {{ turno.historiaClinica?.temperatura }} °C</p>
