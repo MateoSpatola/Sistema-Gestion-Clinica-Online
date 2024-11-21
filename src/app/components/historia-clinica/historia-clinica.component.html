@@ -6,63 +6,86 @@
     }
 
     
-    @if (turnosConHistoriaClinicaFiltrados.length > 0) {
+    @if (turnosConHistoriaClinica.length > 0) {
 
         <div class="text-center mt-3">
             <span class="fw-bold">Filtrar por especialidad:</span>
         </div>
         <div class="btn-group m-0">
-            <button class="btn" [class]="especialidadSeleccionada == '' ? 'btn-secondary' : 'btn-outline-secondary'" (click)="filtrarTurnos('')">Todas</button>
+            <button class="btn" [class]="especialidadSeleccionada == '' ? 'btn-secondary' : 'btn-outline-secondary'" (click)="seleccionarEspecialidad('')">Todas</button>
             @for (especialidad of especialidadesUnicas; track $index) {
-                <button class="btn" [class]="especialidadSeleccionada == especialidad ? 'btn-secondary' : 'btn-outline-secondary'" (click)="filtrarTurnos(especialidad)">
+                <button class="btn" [class]="especialidadSeleccionada == especialidad ? 'btn-secondary' : 'btn-outline-secondary'" (click)="seleccionarEspecialidad(especialidad)">
                     {{ especialidad }}
                 </button>
             }
         </div>
 
-        <div >
-            @for (turno of turnosConHistoriaClinicaFiltrados; track $index) {
-                <div class="card m-3">
-                    <div class="card-header text-center">
-                        <h4 class="card-title fw-bold">{{ turno.especialidad }}</h4>
-                        <h4 class="card-subtitle fw-bold">{{ turno.fechaCompleta  | date: 'dd/MM/yyyy - hh:mm a' }}</h4>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Especialista:</strong> {{ turno.nombreEspecialista }}</p>
-                        <p><strong>Altura:</strong> {{ turno.historiaClinica?.altura }} cm</p>
-                        <p><strong>Peso:</strong> {{ turno.historiaClinica?.peso }} kg</p>
-                        <p><strong>Temperatura:</strong> {{ turno.historiaClinica?.temperatura }} °C</p>
-                        <p><strong>Presión:</strong> {{ turno.historiaClinica?.presionSistolica + ' / ' + turno.historiaClinica?.presionDiastolica }} mmHg</p>
-            
-                        @if (turno.historiaClinica?.datosDinamicos && objectKeys(turno.historiaClinica!.datosDinamicos).length > 0) {
-                            <div>
-                                @for (key of objectKeys(turno.historiaClinica!.datosDinamicos); track $index) {
-                                    <p><strong>{{ key }}:</strong> {{ turno.historiaClinica!.datosDinamicos[key] }}</p>
-                                }
-                            </div>
-                        }
-                    </div>
-                    @if(verResenia) {
-                        @if (turno.resenia) {
-                            <div class="card-footer">
-                                <button type="button" class="p-3 btn btn-secondary w-100 shadow"
-                                data-bs-toggle="modal" [attr.data-bs-target]="'#modalVerResenia' + turno.id">
-                                    Ver reseña
-                                </button>
-                            </div>
-                        }
-                    }
-                </div>
-            }
-        </div>
+        @if (!especialista) {
+            <div class="text-center mt-3">
+                <span class="fw-bold">Filtrar por especialista:</span>
+            </div>
+            <div class="btn-group m-0">
+                <button class="btn" [class]="especialistaSeleccionado == '' ? 'btn-secondary' : 'btn-outline-secondary'" (click)="seleccionarEspecialista('')">Todos</button>
+                @for (especialista of especialistasUnicos; track $index) {
+                    <button class="btn" [class]="especialistaSeleccionado == especialista ? 'btn-secondary' : 'btn-outline-secondary'" (click)="seleccionarEspecialista(especialista)">
+                        {{ especialista }}
+                    </button>
+                }
+            </div>
+        }
 
-        <button class="p-3 btn btn-info w-100 shadow m-3" (click)="descargarPDFHistoriaClinica()">
-            <i class="bi bi-download me-2"></i>
-            Descargar historia clínica (*pdf)
-        </button>
+        @if (turnosConHistoriaClinicaFiltrados.length > 0) {
+            <div>
+                @for (turno of turnosConHistoriaClinicaFiltrados; track $index) {
+                    <div class="card m-3">
+                        <div class="card-header text-center">
+                            <h4 class="card-title fw-bold">{{ turno.especialidad }}</h4>
+                            <h4 class="card-subtitle fw-bold">{{ turno.fechaCompleta  | date: 'dd/MM/yyyy - hh:mm a' }}</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Especialista:</strong> {{ turno.nombreEspecialista }}</p>
+                            <p><strong>Altura:</strong> {{ turno.historiaClinica?.altura }} cm</p>
+                            <p><strong>Peso:</strong> {{ turno.historiaClinica?.peso }} kg</p>
+                            <p><strong>Temperatura:</strong> {{ turno.historiaClinica?.temperatura }} °C</p>
+                            <p><strong>Presión:</strong> {{ turno.historiaClinica?.presionSistolica + ' / ' + turno.historiaClinica?.presionDiastolica }} mmHg</p>
+                
+                            @if (turno.historiaClinica?.datosDinamicos && objectKeys(turno.historiaClinica!.datosDinamicos).length > 0) {
+                                <div>
+                                    @for (key of objectKeys(turno.historiaClinica!.datosDinamicos); track $index) {
+                                        <p><strong>{{ key }}:</strong> {{ turno.historiaClinica!.datosDinamicos[key] }}</p>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        @if(verResenia) {
+                            @if (turno.resenia) {
+                                <div class="card-footer">
+                                    <button type="button" class="p-3 btn btn-secondary w-100 shadow"
+                                    data-bs-toggle="modal" [attr.data-bs-target]="'#modalVerResenia' + turno.id">
+                                        Ver reseña
+                                    </button>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+
+            <button class="p-3 btn btn-info w-100 shadow m-3" (click)="descargarPDFHistoriaClinica()">
+                <i class="bi bi-download me-2"></i>
+                Descargar historia clínica (*pdf)
+            </button>
+        }
+        @else {
+            <div class="text-center m-5">
+                <p class="p-3 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+                    No hay historias clínicas para el filtro seleccionado.
+                </p>
+            </div>
+        }
     }
     @else {
-        <div class="text-center m-3">
+        <div class="text-center m-5">
             <p class="p-3 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
                 No se encontraron historias clínicas.
             </p>

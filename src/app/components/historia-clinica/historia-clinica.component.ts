@@ -27,6 +27,9 @@ export class HistoriaClinicaComponent {
   protected especialidadesUnicas: string[] = [];
   protected especialidadSeleccionada: string = '';
 
+  protected especialistasUnicos: string[] = [];
+  protected especialistaSeleccionado: string = '';
+
   ngOnInit(): void {
     this._databaseService.getDocument('turnos').subscribe(response => {
       response.forEach((res: any) => {
@@ -35,10 +38,12 @@ export class HistoriaClinicaComponent {
             res.fechaCompleta = this._databaseService.convertTimestampToDate(res.fechaCompleta);
             this.turnosConHistoriaClinica.push(res);
             this.especialidadesUnicas.push(res.especialidad);
+            this.especialistasUnicos.push(res.nombreEspecialista);
           }
         }
       });
       this.especialidadesUnicas = [...new Set(this.especialidadesUnicas)];
+      this.especialistasUnicos = [...new Set(this.especialistasUnicos)];
       if(this.especialista) {
         this.turnosConHistoriaClinica = this.turnosConHistoriaClinica.filter(turno => turno.correoEspecialista === this.especialista?.correo);
       }
@@ -47,14 +52,26 @@ export class HistoriaClinicaComponent {
   }
 
 
-  filtrarTurnos(especialidad: string) {
-    if (especialidad) {
-      this.turnosConHistoriaClinicaFiltrados = this.turnosConHistoriaClinica.filter(turno => turno.especialidad === especialidad);
-      this.especialidadSeleccionada = especialidad;
-    } else {
-      this.turnosConHistoriaClinicaFiltrados = this.turnosConHistoriaClinica;
-      this.especialidadSeleccionada = '';
-    }
+  filtrarTurnos() {
+    this.turnosConHistoriaClinicaFiltrados = this.turnosConHistoriaClinica.filter(turno => {
+      const coincideEspecialidad = this.especialidadSeleccionada
+        ? turno.especialidad === this.especialidadSeleccionada
+        : true;
+      const coincideEspecialista = this.especialistaSeleccionado
+        ? turno.nombreEspecialista === this.especialistaSeleccionado
+        : true;
+      return coincideEspecialidad && coincideEspecialista;
+    });
+  }
+  
+  seleccionarEspecialidad(especialidad: string) {
+    this.especialidadSeleccionada = especialidad;
+    this.filtrarTurnos(); // Recalcula los turnos filtrados
+  }
+  
+  seleccionarEspecialista(especialista: string) {
+    this.especialistaSeleccionado = especialista;
+    this.filtrarTurnos(); // Recalcula los turnos filtrados
   }
 
   descargarPDFHistoriaClinica() {
