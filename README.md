@@ -1,7 +1,7 @@
 # Sistema de Gestión para Clínica Online (Trabajo Práctico)
 
-Materia: Laboratorio de Computación IV
-Alumno: Mateo Spatola
+#### Materia: Laboratorio de Computación IV
+#### Alumno: Mateo Spatola
 
 ---
 
@@ -123,12 +123,16 @@ Formulario de registro para administradores (solo desde un admin).
 
 ### **Gestión de Turnos**
 ![Solicitar Turno - Especialidad](Imagenes_readme/solicitar_turno_desde_paciente.png)  
-Pantalla para seleccionar especialidad al solicitar un turno desde un paciente.
+Pantalla para seleccionar especialidad al solicitar un turno desde un paciente.  
 
-Pantalla para seleccionar paciente al solicitar un turno desde un administrador:
-- ![Solicitar Turno desde Admin 1](Imagenes_readme/solicitar_turno_desde_admin_1.png)
-- ![Solicitar Turno desde Admin 2](Imagenes_readme/solicitar_turno_desde_admin_2.png)  
-- ![Solicitar Turno desde Admin 3](Imagenes_readme/solicitar_turno_desde_admin_3.png)  
+![Solicitar Turno desde Admin 1](Imagenes_readme/solicitar_turno_desde_admin_1.png)  
+Pantalla para seleccionar paciente al solicitar un turno desde un administrador (1)
+
+![Solicitar Turno desde Admin 2](Imagenes_readme/solicitar_turno_desde_admin_2.png) 
+Pantalla para seleccionar paciente al solicitar un turno desde un administrador (2)
+
+![Solicitar Turno desde Admin 3](Imagenes_readme/solicitar_turno_desde_admin_3.png)  
+Pantalla para seleccionar paciente al solicitar un turno desde un administrador (3)
 
 ### **Listados**
 ![Listado Turnos](Imagenes_readme/listado_turnos.png)  
