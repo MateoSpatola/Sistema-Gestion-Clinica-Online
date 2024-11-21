@@ -1,210 +1,211 @@
-
-<h2 class="mb-4 text-center fs-1 fw-bold">Registro {{tipoUsuario}}</h2>
-<form [formGroup]="form" (ngSubmit)="submit()" (keypress.enter)="submit()">
-
-    <div class="row">
+<div [@slideDownAnimation]>  
+    <h2 class="mb-4 text-center fs-1 fw-bold">Registro {{tipoUsuario}}</h2>
+    <form [formGroup]="form" (ngSubmit)="submit()" (keypress.enter)="submit()">
     
-        <!-- Nombre -->
-        <div class="col-lg-6">
-            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                <mat-icon matPrefix>chevron_right</mat-icon>
-                <mat-label>Nombre</mat-label>
-                <input matInput type="text" [formControl]="form.controls.nombre" placeholder="Ingrese su nombre">
-                @if (form.controls.nombre.hasError('required')) {
-                    <mat-error>El nombre es <strong>requerido</strong></mat-error>
-                }
-                @if (form.controls.nombre.hasError('minlength')) {
-                    <mat-error>El nombre debe tener al menos <strong>4 caracteres</strong></mat-error>
-                }
-            </mat-form-field>
-        </div>
-
-        <!-- Apellido -->
-        <div class="col-lg-6">
-            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                <mat-icon matPrefix>chevron_right</mat-icon>
-                <mat-label>Apellido</mat-label>
-                <input matInput type="text" [formControl]="form.controls.apellido" placeholder="Ingrese su apellido">
-                @if (form.controls.apellido.hasError('required')) {
-                    <mat-error>El apellido es <strong>requerido</strong></mat-error>
-                }
-            </mat-form-field>
-        </div>
-
-        <!-- Edad -->
-        <div class="col-lg-6">
-            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                <mat-icon matPrefix>chevron_right</mat-icon>
-                <mat-label>Edad</mat-label>
-                <input matInput type="number" [formControl]="form.controls.edad" placeholder="Ingrese su edad">
-                @if (form.controls.edad.hasError('required')) {
-                    <mat-error>La edad es <strong>requerida</strong></mat-error>
-                }
-                @if (form.controls.edad.hasError('min') || form.controls.edad.hasError('max')) {
-                    <mat-error>Ingrese una edad <strong>válida</strong></mat-error>
-                }
-            </mat-form-field>
-        </div>
-
-        <!-- DNI -->
-        <div class="col-lg-6">
-            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                <mat-icon matPrefix>chevron_right</mat-icon>
-                <mat-label>DNI</mat-label>
-                <input matInput type="number" [formControl]="form.controls.dni" placeholder="Ingrese su dni">
-                @if (form.controls.dni.hasError('required')) {
-                    <mat-error>El dni es <strong>requerido</strong></mat-error>
-                }
-                @if (form.controls.dni.hasError('min') || form.controls.dni.hasError('max')) {
-                    <mat-error>Ingrese un dni <strong>válido</strong></mat-error>
-                }
-            </mat-form-field>
-        </div>
-
-        @if(tipoUsuario == "Paciente") {
-            <!-- Obra Social -->
-            <div class="col-12">
-                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                    <mat-icon matPrefix>chevron_right</mat-icon>
-                    <mat-label>Obra Social</mat-label>
-                    <input matInput type="text" [formControl]="form.controls.obraSocial" placeholder="Ingrese su obra social">
-                    @if (form.controls.obraSocial.hasError('required')) {
-                        <mat-error>La obra social es <strong>requerida</strong></mat-error>
-                    }
-                </mat-form-field>
-            </div>
-        }
-
-        @if(tipoUsuario == "Especialista") {
-            <!-- Especialidades -->
-            <div class="col-12">
-                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                    <mat-icon matPrefix>chevron_right</mat-icon>
-                    <mat-label>Especialidades</mat-label>
-                    <mat-chip-grid #chipGrid [formControl]="form.controls.especialidades">
-                        @for (especialidad of especialidadesSeleccionadas; track especialidad) {
-                            <mat-chip-row (removed)="eliminarEspecialidad(especialidad)">
-                                {{especialidad}}
-                                <button matChipRemove>
-                                    <mat-icon>cancel</mat-icon>
-                                </button>
-                            </mat-chip-row>
-                        }
-                    </mat-chip-grid>
-                    <input
-                        [formControl]="form.controls.especialidades"
-                        placeholder="Ingrese una especialidad"
-                        [matChipInputFor]="chipGrid"
-                        [matAutocomplete]="auto"
-                        (matChipInputTokenEnd)="agregarEspecialidad($event)"
-                        [(ngModel)]="especialidadActual"
-                    />
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="especialidadSeleccionada($event)">
-                        @for (especialidad of especialidadesFiltradas(); track especialidad) {
-                            <mat-option [value]="especialidad.nombre">{{especialidad.nombre}}</mat-option>
-                        }
-                    </mat-autocomplete>
-                    @if (form.controls.especialidades.hasError('required')) {
-                        <mat-error>Seleccione <strong>al menos una</strong> especialidad</mat-error>
-                    }
-                </mat-form-field>
-            </div>
-        }
+        <div class="row">
         
-        <!-- Correo -->
-        <div class="col-lg-6">
-            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                <mat-icon matPrefix>chevron_right</mat-icon>
-                <mat-label>Correo</mat-label>
-                <input matInput type="email" [formControl]="form.controls.correo" placeholder="Ingrese su correo">
-                @if (form.controls.correo.hasError('email')) {
-                    <mat-error >Ingrese un correo <strong>válido</strong></mat-error>
-                }
-                @if (form.controls.correo.hasError('required')) {
-                    <mat-error>El correo es <strong>requerido</strong></mat-error>
-                }
-            </mat-form-field>
-        </div>
-
-        <!-- Contraseña -->
-        <div class="col-lg-6">
-            <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
-                <mat-icon matPrefix>chevron_right</mat-icon>
-                <mat-label>Contraseña</mat-label>
-                <input matInput [formControl]="form.controls.clave" placeholder="Ingrese su contraseña" [type]="mostrarClave ? 'text' : 'password'" >
-                <mat-icon matSuffix (click)="cambiarVisibilidadClave()">{{mostrarClave ? 'visibility_off' : 'visibility'}}</mat-icon>
-                @if (form.controls.clave.hasError('required')) {
-                    <mat-error>La contraseña es <strong>requerida</strong></mat-error>
-                }
-                @if (form.controls.clave.hasError('minlength')) {
-                    <mat-error>La contraseña debe tener al menos <strong>8 caracteres</strong></mat-error>
-                }
-            </mat-form-field>
-        </div>
-
-        <!-- Imagen Perfil -->
-        <div class="imagenPerfil col-12">
-            <label class="titleFile">Imagen Perfil</label>
-            <label for="inputImagenPerfil" class="labelFile">
-                <mat-icon class="iconFile">upload</mat-icon>
-                <span class="file-text">
-                    {{ form.controls.imagenPerfil.value ? form.controls.imagenPerfil.value.split('\\').pop() : 'Seleccione una imagen de perfil' }}
-                </span>
-            </label>
-            <input
-                type="file" class="inputFile" id="inputImagenPerfil"
-                [formControl]="form.controls.imagenPerfil"
-                (change)="imagenPerfil = $event"
-            >
-            @if (form.controls.imagenPerfil.hasError('required') && form.controls.imagenPerfil.touched) {
-                <mat-error>La imagen de perfil es <strong>requerida</strong></mat-error>
+            <!-- Nombre -->
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                    <mat-icon matPrefix>chevron_right</mat-icon>
+                    <mat-label>Nombre</mat-label>
+                    <input matInput type="text" [formControl]="form.controls.nombre" placeholder="Ingrese su nombre">
+                    @if (form.controls.nombre.hasError('required')) {
+                        <mat-error>El nombre es <strong>requerido</strong></mat-error>
+                    }
+                    @if (form.controls.nombre.hasError('minlength')) {
+                        <mat-error>El nombre debe tener al menos <strong>4 caracteres</strong></mat-error>
+                    }
+                </mat-form-field>
+            </div>
+    
+            <!-- Apellido -->
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                    <mat-icon matPrefix>chevron_right</mat-icon>
+                    <mat-label>Apellido</mat-label>
+                    <input matInput type="text" [formControl]="form.controls.apellido" placeholder="Ingrese su apellido">
+                    @if (form.controls.apellido.hasError('required')) {
+                        <mat-error>El apellido es <strong>requerido</strong></mat-error>
+                    }
+                </mat-form-field>
+            </div>
+    
+            <!-- Edad -->
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                    <mat-icon matPrefix>chevron_right</mat-icon>
+                    <mat-label>Edad</mat-label>
+                    <input matInput type="number" [formControl]="form.controls.edad" placeholder="Ingrese su edad">
+                    @if (form.controls.edad.hasError('required')) {
+                        <mat-error>La edad es <strong>requerida</strong></mat-error>
+                    }
+                    @if (form.controls.edad.hasError('min') || form.controls.edad.hasError('max')) {
+                        <mat-error>Ingrese una edad <strong>válida</strong></mat-error>
+                    }
+                </mat-form-field>
+            </div>
+    
+            <!-- DNI -->
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                    <mat-icon matPrefix>chevron_right</mat-icon>
+                    <mat-label>DNI</mat-label>
+                    <input matInput type="number" [formControl]="form.controls.dni" placeholder="Ingrese su dni">
+                    @if (form.controls.dni.hasError('required')) {
+                        <mat-error>El dni es <strong>requerido</strong></mat-error>
+                    }
+                    @if (form.controls.dni.hasError('min') || form.controls.dni.hasError('max')) {
+                        <mat-error>Ingrese un dni <strong>válido</strong></mat-error>
+                    }
+                </mat-form-field>
+            </div>
+    
+            @if(tipoUsuario == "Paciente") {
+                <!-- Obra Social -->
+                <div class="col-12">
+                    <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                        <mat-icon matPrefix>chevron_right</mat-icon>
+                        <mat-label>Obra Social</mat-label>
+                        <input matInput type="text" [formControl]="form.controls.obraSocial" placeholder="Ingrese su obra social">
+                        @if (form.controls.obraSocial.hasError('required')) {
+                            <mat-error>La obra social es <strong>requerida</strong></mat-error>
+                        }
+                    </mat-form-field>
+                </div>
             }
-        </div>
-
-        @if(tipoUsuario == "Paciente") {
-            <!-- Imagen Portada -->
-            <div class="imagenPortada col-12">
-                <label class="titleFile">Imagen Portada</label>
-                <label for="inputImagenPortada" class="labelFile">
+    
+            @if(tipoUsuario == "Especialista") {
+                <!-- Especialidades -->
+                <div class="col-12">
+                    <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                        <mat-icon matPrefix>chevron_right</mat-icon>
+                        <mat-label>Especialidades</mat-label>
+                        <mat-chip-grid #chipGrid [formControl]="form.controls.especialidades">
+                            @for (especialidad of especialidadesSeleccionadas; track especialidad) {
+                                <mat-chip-row (removed)="eliminarEspecialidad(especialidad)">
+                                    {{especialidad}}
+                                    <button matChipRemove>
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+                                </mat-chip-row>
+                            }
+                        </mat-chip-grid>
+                        <input
+                            [formControl]="form.controls.especialidades"
+                            placeholder="Ingrese una especialidad"
+                            [matChipInputFor]="chipGrid"
+                            [matAutocomplete]="auto"
+                            (matChipInputTokenEnd)="agregarEspecialidad($event)"
+                            [(ngModel)]="especialidadActual"
+                        />
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="especialidadSeleccionada($event)">
+                            @for (especialidad of especialidadesFiltradas(); track especialidad) {
+                                <mat-option [value]="especialidad.nombre">{{especialidad.nombre}}</mat-option>
+                            }
+                        </mat-autocomplete>
+                        @if (form.controls.especialidades.hasError('required')) {
+                            <mat-error>Seleccione <strong>al menos una</strong> especialidad</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            }
+            
+            <!-- Correo -->
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                    <mat-icon matPrefix>chevron_right</mat-icon>
+                    <mat-label>Correo</mat-label>
+                    <input matInput type="email" [formControl]="form.controls.correo" placeholder="Ingrese su correo">
+                    @if (form.controls.correo.hasError('email')) {
+                        <mat-error >Ingrese un correo <strong>válido</strong></mat-error>
+                    }
+                    @if (form.controls.correo.hasError('required')) {
+                        <mat-error>El correo es <strong>requerido</strong></mat-error>
+                    }
+                </mat-form-field>
+            </div>
+    
+            <!-- Contraseña -->
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" floatLabel="always" hideRequiredMarker>
+                    <mat-icon matPrefix>chevron_right</mat-icon>
+                    <mat-label>Contraseña</mat-label>
+                    <input matInput [formControl]="form.controls.clave" placeholder="Ingrese su contraseña" [type]="mostrarClave ? 'text' : 'password'" >
+                    <mat-icon matSuffix (click)="cambiarVisibilidadClave()">{{mostrarClave ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    @if (form.controls.clave.hasError('required')) {
+                        <mat-error>La contraseña es <strong>requerida</strong></mat-error>
+                    }
+                    @if (form.controls.clave.hasError('minlength')) {
+                        <mat-error>La contraseña debe tener al menos <strong>8 caracteres</strong></mat-error>
+                    }
+                </mat-form-field>
+            </div>
+    
+            <!-- Imagen Perfil -->
+            <div class="imagenPerfil col-12">
+                <label class="titleFile">Imagen Perfil</label>
+                <label for="inputImagenPerfil" class="labelFile">
                     <mat-icon class="iconFile">upload</mat-icon>
                     <span class="file-text">
-                        {{ form.controls.imagenPortada.value ? form.controls.imagenPortada.value.split('\\').pop() : 'Seleccione una imagen de portada' }}
+                        {{ form.controls.imagenPerfil.value ? form.controls.imagenPerfil.value.split('\\').pop() : 'Seleccione una imagen de perfil' }}
                     </span>
                 </label>
                 <input
-                    type="file" class="inputFile" id="inputImagenPortada"
-                    [formControl]="form.controls.imagenPortada"
-                    (change)="imagenPortada = $event"
+                    type="file" class="inputFile" id="inputImagenPerfil"
+                    [formControl]="form.controls.imagenPerfil"
+                    (change)="imagenPerfil = $event"
                 >
-                @if (form.controls.imagenPortada.hasError('required') && form.controls.imagenPortada.touched) {
-                    <mat-error>La imagen de portada es <strong>requerida</strong></mat-error>
+                @if (form.controls.imagenPerfil.hasError('required') && form.controls.imagenPerfil.touched) {
+                    <mat-error>La imagen de perfil es <strong>requerida</strong></mat-error>
                 }
             </div>
-        }
-
-        <!-- reCAPTCHA -->
-        <div class="recaptcha col-12 d-flex justify-content-center align-items-center flex-column">
-            <re-captcha siteKey="6Ld01X0qAAAAANrD8PT4Bxg6atWuFPK_8vMKFonV" [formControl]="form.controls.recaptcha"></re-captcha>
-            @if (form.controls.recaptcha.hasError('required') && form.controls.recaptcha.touched) {
-                <mat-error>La validación reCAPTCHA es <strong>requerida</strong></mat-error>
+    
+            @if(tipoUsuario == "Paciente") {
+                <!-- Imagen Portada -->
+                <div class="imagenPortada col-12">
+                    <label class="titleFile">Imagen Portada</label>
+                    <label for="inputImagenPortada" class="labelFile">
+                        <mat-icon class="iconFile">upload</mat-icon>
+                        <span class="file-text">
+                            {{ form.controls.imagenPortada.value ? form.controls.imagenPortada.value.split('\\').pop() : 'Seleccione una imagen de portada' }}
+                        </span>
+                    </label>
+                    <input
+                        type="file" class="inputFile" id="inputImagenPortada"
+                        [formControl]="form.controls.imagenPortada"
+                        (change)="imagenPortada = $event"
+                    >
+                    @if (form.controls.imagenPortada.hasError('required') && form.controls.imagenPortada.touched) {
+                        <mat-error>La imagen de portada es <strong>requerida</strong></mat-error>
+                    }
+                </div>
             }
-        </div>
-
-        <!-- Botón de registro -->
-        <div class="col-12 mt-3">
-            <button type="submit" class="btn btn-lg btn-primary w-100 shadow">
-                Crear cuenta
-            </button>
-        </div>
-
-        @if (!altaDesdeUnAdmin) {
-            <!-- Ingresar -->
-            <div class="text-center mt-2">
-                <span>¿Ya tenés una cuenta? </span>
-                <a routerLink="/ingreso">Iniciar sesión</a>
+    
+            <!-- reCAPTCHA -->
+            <div class="recaptcha col-12 d-flex justify-content-center align-items-center flex-column">
+                <re-captcha siteKey="6Ld01X0qAAAAANrD8PT4Bxg6atWuFPK_8vMKFonV" [formControl]="form.controls.recaptcha"></re-captcha>
+                @if (form.controls.recaptcha.hasError('required') && form.controls.recaptcha.touched) {
+                    <mat-error>La validación reCAPTCHA es <strong>requerida</strong></mat-error>
+                }
             </div>
-        }
-        
-
-    </div> 
-</form>
+    
+            <!-- Botón de registro -->
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-lg btn-primary w-100 shadow">
+                    Crear cuenta
+                </button>
+            </div>
+    
+            @if (!altaDesdeUnAdmin) {
+                <!-- Ingresar -->
+                <div class="text-center mt-2">
+                    <span>¿Ya tenés una cuenta? </span>
+                    <a routerLink="/ingreso">Iniciar sesión</a>
+                </div>
+            }
+            
+    
+        </div> 
+    </form>
+</div>

@@ -11,6 +11,7 @@ import { MatChipInputEvent, MatChipsModule, MAT_CHIPS_DEFAULT_OPTIONS } from '@a
 import { COMMA, SPACE } from '@angular/cdk/keycodes';
 import { Especialidad } from '../../models/especialidad';
 import { RecaptchaModule, RecaptchaFormsModule } from "ng-recaptcha";
+import { slideDownAnimation } from '../../animations';
 
 @Component({
   selector: 'app-form-registro',
@@ -35,7 +36,8 @@ import { RecaptchaModule, RecaptchaFormsModule } from "ng-recaptcha";
     }
   ],
   templateUrl: './form-registro.component.html',
-  styleUrl: './form-registro.component.css'
+  styleUrl: './form-registro.component.css',
+  animations: [slideDownAnimation],
 })
 export class FormRegistroComponent {
   @Input() tipoUsuario?: "Paciente" | "Especialista" | "Administrador";
