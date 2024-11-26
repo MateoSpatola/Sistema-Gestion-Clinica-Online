@@ -1,12 +1,13 @@
-import {Component, inject, Input} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormControl, Validators, FormsModule, ReactiveFormsModule, FormGroup} from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
-import {MatIconModule} from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { DatabaseService } from '../../../services/database.service';
 import { NgClass } from '@angular/common';
+import { LogIngreso } from '../../../models/logIngreso';
 
 @Component({
   selector: 'app-ingreso',
@@ -84,6 +85,13 @@ export class IngresoComponent {
             this.form.reset();
             this._notificationService.closeAlert();
             this._notificationService.routerLink('');
+
+            const log: LogIngreso = {
+              fecha: new Date(),
+              correoUsuario: usuario.correo,
+              nombreUsuario: usuario.nombre
+            }
+            this._databaseService.setDocument('log_ingresos', log);
           }
         }
       } catch (error: any) {
