@@ -1,0 +1,23 @@
+<div class="container py-4 text-center d-flex justify-content-center align-items-center flex-column">
+
+    <h2 class="text-center fw-bold fs-2 m-0 p-2">Cantidad de turnos por especialidad</h2>
+
+    @if (!chartListo) {
+        <div class="spinner-border p-5 m-5" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    }
+
+    <div class="w-50 p-1 m-1">
+        <canvas id="turnosPorEspecialidadChart"></canvas>
+    </div>
+
+    @if (chartListo) {
+        <button class="p-3 btn btn-info w-100 shadow m-3" (click)="descargarPDFTurnosPorEspecialidad()">
+            <i class="bi bi-download me-2"></i>
+            Descargar gráfico (*pdf)
+        </button>
+    }
+    
+
+</div>
