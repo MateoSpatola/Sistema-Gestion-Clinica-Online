@@ -87,9 +87,9 @@ export class IngresoComponent {
             this._notificationService.routerLink('');
 
             const log: LogIngreso = {
-              fecha: new Date(),
-              correoUsuario: usuario.correo,
-              nombreUsuario: usuario.nombre
+              nombreCompletoUsuario: usuario.nombre + ' ' + usuario.apellido,
+              tipoUsuario: usuario.tipo,
+              fechaIngreso: new Date()
             }
             this._databaseService.setDocument('log_ingresos', log);
           }

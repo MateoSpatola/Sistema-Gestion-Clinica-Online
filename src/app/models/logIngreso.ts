@@ -1,5 +1,5 @@
 export interface LogIngreso {
-    fecha: Date;
-    correoUsuario: string;
-    nombreUsuario: string;
+    tipoUsuario: string;
+    nombreCompletoUsuario: string;
+    fechaIngreso: Date;
 }
