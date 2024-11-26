@@ -1,0 +1,46 @@
+.nav-tabs {
+    border-bottom: 2px solid #ddd;
+}
+
+.nav-item .nav-link {
+    color: #666777;
+    font-weight: bold;
+    font-size: 1.2rem;
+    position: relative;
+    padding: 10px 15px;
+    border: 2px solid transparent;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    transition: 0.3s ease-in-out;
+}
+
+.nav-item .nav-link:hover {
+    color: #000;
+    border-color: #666777;
+}
+
+.nav-item .nav-link.active {
+    color: #000;
+    font-weight: bold;
+    border: 2px solid #333;
+    border-bottom: 2px solid #fff;
+    background-color: #f8f9fa;
+}
+
+.nav-link::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background-color: #666777;
+    visibility: hidden;
+    transition: 0.3s ease-in-out;
+}
+
+.nav-link:hover::before, .nav-link.active::before {
+    width: 90%;
+    visibility: visible;
+}

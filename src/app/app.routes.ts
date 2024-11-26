@@ -14,4 +14,5 @@ export const routes: Routes = [
     { path: 'turnos', loadComponent: () => import('./pages/turnos/turnos.component').then((m) => m.TurnosComponent), canActivate: [noAuthAdminGuard], data: {animation: 'turnos'} },
     { path: 'mis-turnos', loadComponent: () => import('./pages/mis-turnos/mis-turnos.component').then((m) => m.MisTurnosComponent), canActivate: [noAuthGuard], data: {animation: 'mis-turnos'} },
     { path: 'pacientes', loadComponent: () => import('./pages/pacientes/pacientes.component').then((m) => m.PacientesComponent), canActivate: [noAuthGuard], data: {animation: 'pacientes'} },
+    { path: 'estadisticas', loadComponent: () => import('./pages/estadisticas/estadisticas.component').then((m) => m.EstadisticasComponent), canActivate: [noAuthAdminGuard], data: {animation: 'estadisticas'} },
 ];

@@ -1,0 +1,54 @@
+<div class="rounded-4 p-3 m-3 bg-white shadow">
+
+    <h2 class="mb-4 text-center fs-1 fw-bold">Estadísticas del Sistema</h2>
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="tabSeleccionado === 'logIngresos'" (click)="tabSeleccionado = 'logIngresos'">
+                Log de ingresos
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="tabSeleccionado === 'turnosPorEspecialidad'" (click)="tabSeleccionado = 'turnosPorEspecialidad'">
+                Turnos por especialidad
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="tabSeleccionado === 'turnosPorDia'" (click)="tabSeleccionado = 'turnosPorDia'">
+                Turnos por día
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="tabSeleccionado === 'turnosSolicitados'" (click)="tabSeleccionado = 'turnosSolicitados'">
+                Turnos solicitados
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="tabSeleccionado === 'turnosFinalizados'" (click)="tabSeleccionado = 'turnosFinalizados'">
+                Turnos finalizados
+            </a>
+        </li>
+    </ul>
+
+    @switch (tabSeleccionado) {
+        @case ('logIngresos') {
+            <app-log-ingresos></app-log-ingresos>
+        }
+        @case ('turnosPorEspecialidad') {
+
+        }
+        @case ('turnosPorDia') {
+
+        }
+        @case ('turnosSolicitados') {
+
+        }
+        @case ('turnosFinalizados') {
+
+        }
+        @default {
+            <p class="p-3 m-5 text-center text-dark-emphasis fw-bold bg-light-subtle border border-dark-subtle rounded-3 fs-4 shadow">Seleccione la estadística que desea ver.</p>
+        }
+    }
+
+</div>
