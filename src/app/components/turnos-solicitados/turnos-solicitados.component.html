@@ -1,0 +1,42 @@
+<div class="container py-4 text-center d-flex justify-content-center align-items-center flex-column">
+
+    <h2 class="text-center fw-bold fs-2 m-0 p-2">Cantidad de turnos solicitados por médico en un lapso de tiempo</h2>
+
+    <div class="container w-75 p-4 mt-4 border rounded shadow bg-light">
+        <h5 class="text-center mb-4 fw-bold">Seleccionar rango de fechas</h5>
+        <div class="row g-3 align-items-center">
+            <div class="col-md-6">
+                <label for="fechaInicio" class="form-label">Fecha de inicio:</label>
+                <input type="date" id="fechaInicio" [(ngModel)]="fechaInicio" class="form-control" [max]="fechaFin || ''"/>
+            </div>
+
+            <div class="col-md-6">
+                <label for="fechaFin" class="form-label">Fecha de fin:</label>
+                <input type="date" id="fechaFin" [(ngModel)]="fechaFin" class="form-control" [min]="fechaInicio || ''"/>
+            </div>
+        </div>
+        <div class="mt-4 text-center">
+            <button class="btn btn-primary px-5" (click)="filtrarTurnosPorMedico()" [disabled]="!fechaInicio || !fechaFin">
+                Filtrar
+            </button>
+        </div>
+    </div>
+
+    @if (!chart) {
+    <p class="p-3 mt-5 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+        En este momento no hay turnos disponibles para el rango de fechas seleccionado.
+    </p>
+    }
+
+    <div class="w-50 p-1 m-1">
+        <canvas id="turnosSolicitadosPorMedicoChart"></canvas>
+    </div>
+
+    @if (chart) {
+    <button class="p-3 btn btn-info w-100 shadow m-3" (click)="descargarPDFTurnosSolicitadosPorMedico()">
+        <i class="bi bi-download me-2"></i>
+        Descargar gráfico (*pdf)
+    </button>
+    }
+
+</div>
