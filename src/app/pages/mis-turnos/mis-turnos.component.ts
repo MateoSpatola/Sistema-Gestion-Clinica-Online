@@ -2,13 +2,14 @@ import { Component, inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Turno } from '../../models/turno';
 import { Usuario } from '../../models/usuario';
 import { AuthService } from '../../services/auth.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { HistoriaClinica } from '../../models/historiaClinica';
+import { EstadoBadgeDirective } from '../../directives/estado-badge.directive';
 
 @Component({
   selector: 'app-mis-turnos',
@@ -17,9 +18,9 @@ import { HistoriaClinica } from '../../models/historiaClinica';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    NgClass,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    EstadoBadgeDirective
   ],
   templateUrl: './mis-turnos.component.html',
   styleUrl: './mis-turnos.component.css'

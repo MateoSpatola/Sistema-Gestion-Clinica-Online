@@ -24,18 +24,7 @@
                         <td>{{turno.nombreEspecialista}}</td>
                         <td>{{turno.especialidad}}</td>
                         <td>{{turno.fechaCompleta | date: 'dd/MM/yyyy - hh:mm a'}}</td>
-                        <td>
-                            <span class="badge p-1 w-100 fs-6" [ngClass]="{
-                                'text-bg-secondary': turno.estado == 'Pendiente',
-                                'text-bg-success': turno.estado == 'Aceptado',
-                                'text-bg-primary': turno.estado == 'Realizado',
-                                'text-bg-danger': turno.estado == 'Cancelado',
-                                'text-bg-danger-light': turno.estado == 'Rechazado',
-                            }">
-                                {{ turno.estado }}
-                            </span>
-                        </td>
-                        
+                        <td><span appEstadoBadge [estado]="turno.estado"></span></td>
                         <td>
                             @if (turno.estado == 'Pendiente') {
                                 <button type="button" class="btn btn-link" data-bs-toggle="modal" [attr.data-bs-target]="'#modal' + turno.id">

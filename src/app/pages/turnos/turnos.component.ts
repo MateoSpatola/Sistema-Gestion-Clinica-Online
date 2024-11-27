@@ -3,8 +3,8 @@ import { DatabaseService } from '../../services/database.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../services/notification.service';
-import { NgClass } from '@angular/common';
 import { Turno } from '../../models/turno';
+import { EstadoBadgeDirective } from '../../directives/estado-badge.directive';
 
 @Component({
   selector: 'app-turnos',
@@ -12,7 +12,7 @@ import { Turno } from '../../models/turno';
   imports: [
     FormsModule,
     CommonModule,
-    NgClass
+    EstadoBadgeDirective
   ],
   templateUrl: './turnos.component.html',
   styleUrl: './turnos.component.css'
