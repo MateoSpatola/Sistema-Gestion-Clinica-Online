@@ -84,7 +84,7 @@
             @if(usuario.obraSocial) {
               <p><strong>Obra Social:</strong> {{usuario.obraSocial}}</p>
             }
-            <p><strong>Correo:</strong> {{usuario.correo}}</p>
+            <p><strong>Correo: </strong><span [innerHTML]="usuario.correo | linkCorreo"></span></p>
             <p><strong>Imagen Perfil:</strong> <img [src]="usuario.imagenPerfil" class="ms-2" height="100px"></p>
             @if(usuario.imagenPortada) {
               <p><strong>Imagen Portada:</strong> <img [src]="usuario.imagenPortada" class="ms-2" height="100px"></p>

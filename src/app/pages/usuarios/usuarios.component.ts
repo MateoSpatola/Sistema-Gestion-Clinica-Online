@@ -6,6 +6,7 @@ import { HistoriaClinicaComponent } from "../../components/historia-clinica/hist
 import * as XLSX from 'xlsx';
 import { Turno } from '../../models/turno';
 import { FormatoDniPipe } from '../../pipes/formato-dni.pipe';
+import { LinkCorreoPipe } from '../../pipes/link-correo.pipe';
 
 @Component({
   selector: 'app-usuarios',
@@ -13,7 +14,8 @@ import { FormatoDniPipe } from '../../pipes/formato-dni.pipe';
   imports: [
     RouterLink,
     HistoriaClinicaComponent,
-    FormatoDniPipe
+    FormatoDniPipe,
+    LinkCorreoPipe
 ],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.css'
