@@ -23,6 +23,7 @@ export class LogIngresosComponent {
         res.fechaIngreso = this._databaseService.convertTimestampToDate(res.fechaIngreso);
         this.logIngresos.push(res);
       });
+      this.logIngresos.sort((a, b) => b.fechaIngreso.getTime() - a.fechaIngreso.getTime());
     })
   }
 
