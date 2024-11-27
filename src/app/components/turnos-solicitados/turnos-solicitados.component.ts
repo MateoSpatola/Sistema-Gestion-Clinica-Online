@@ -3,7 +3,6 @@ import Chart, { ChartType } from 'chart.js/auto';
 import { DatabaseService } from '../../services/database.service';
 import jsPDF from 'jspdf';
 import { FormsModule } from '@angular/forms';
-import { NotificationService } from '../../services/notification.service';
 import { Turno } from '../../models/turno';
 
 
@@ -19,6 +18,7 @@ export class TurnosSolicitadosComponent {
   private _databaseService = inject(DatabaseService);
 
   protected chart: Chart | null = null;
+  protected yaFiltro: boolean = false;
 
   protected fechaInicio: string = '';
   protected fechaFin: string = '';
@@ -36,6 +36,7 @@ export class TurnosSolicitadosComponent {
   }
 
   filtrarTurnosPorMedico() {
+    this.yaFiltro = true;
     this.turnosFiltrados = [];
     if (this.fechaInicio != '' && this.fechaFin != ''){
       const fechaInicio = new Date(this.fechaInicio);
@@ -132,10 +133,14 @@ export class TurnosSolicitadosComponent {
     pdf.setFont('helvetica', 'bold');
     pdf.text(`Gráfico Cantidad de Turnos Solicitados por Medico`, 105, 45, { align: 'center' });
 
+    const fechaInicio = new Date(this.fechaInicio);
+    const fechaFin = new Date(this.fechaFin);
+    pdf.text(`Desde el ${fechaInicio.toLocaleDateString()} al ${fechaFin.toLocaleDateString()}`, 105, 55, { align: 'center' });
+
     const chart = document.getElementById('turnosSolicitadosPorMedicoChart') as HTMLCanvasElement;
     if (chart) {
       const chartImage = chart.toDataURL('image/png');
-      pdf.addImage(chartImage, 'PNG', 15, 60, 180, 180);
+      pdf.addImage(chartImage, 'PNG', 15, 70, 180, 180);
     }
     
     pdf.save(`grafico-cantidad-turnos-solicitados-por-medico.pdf`);

@@ -23,9 +23,16 @@
     </div>
 
     @if (!chart) {
-    <p class="p-3 mt-5 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
-        En este momento no hay turnos disponibles para el rango de fechas seleccionado.
-    </p>
+        @if(yaFiltro) {
+            <p class="p-3 mt-5 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+                En este momento no hay turnos disponibles para el rango de fechas seleccionado.
+            </p>
+        }
+        @else {
+            <p class="p-3 mt-5 text-dark-emphasis bg-dark-subtle border border-dark-subtle rounded-3">
+                Seleccione un rango de fechas para visualizar.
+            </p>
+        }
     }
 
     <div class="w-50 p-1 m-1">
