@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { HistoriaClinica } from '../../models/historiaClinica';
 import { EstadoBadgeDirective } from '../../directives/estado-badge.directive';
+import { FechaInteractivaDirective } from '../../directives/fecha-interactiva.directive';
 
 @Component({
   selector: 'app-mis-turnos',
@@ -20,7 +21,8 @@ import { EstadoBadgeDirective } from '../../directives/estado-badge.directive';
     CommonModule,
     MatInputModule,
     MatIconModule,
-    EstadoBadgeDirective
+    EstadoBadgeDirective,
+    FechaInteractivaDirective
   ],
   templateUrl: './mis-turnos.component.html',
   styleUrl: './mis-turnos.component.css'

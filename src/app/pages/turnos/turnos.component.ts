@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../services/notification.service';
 import { Turno } from '../../models/turno';
 import { EstadoBadgeDirective } from '../../directives/estado-badge.directive';
+import { FechaInteractivaDirective } from '../../directives/fecha-interactiva.directive';
 
 @Component({
   selector: 'app-turnos',
@@ -12,7 +13,8 @@ import { EstadoBadgeDirective } from '../../directives/estado-badge.directive';
   imports: [
     FormsModule,
     CommonModule,
-    EstadoBadgeDirective
+    EstadoBadgeDirective,
+    FechaInteractivaDirective
   ],
   templateUrl: './turnos.component.html',
   styleUrl: './turnos.component.css'
