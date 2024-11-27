@@ -3,11 +3,12 @@ import { LogIngresosComponent } from "../../components/log-ingresos/log-ingresos
 import { TurnosPorEspecialidadComponent } from "../../components/turnos-por-especialidad/turnos-por-especialidad.component";
 import { TurnosPorDiaComponent } from "../../components/turnos-por-dia/turnos-por-dia.component";
 import { TurnosSolicitadosComponent } from "../../components/turnos-solicitados/turnos-solicitados.component";
+import { TurnosFinalizadosComponent } from "../../components/turnos-finalizados/turnos-finalizados.component";
 
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
-  imports: [LogIngresosComponent, TurnosPorEspecialidadComponent, TurnosPorDiaComponent, TurnosSolicitadosComponent],
+  imports: [LogIngresosComponent, TurnosPorEspecialidadComponent, TurnosPorDiaComponent, TurnosSolicitadosComponent, TurnosFinalizadosComponent],
   templateUrl: './estadisticas.component.html',
   styleUrl: './estadisticas.component.css'
 })
