@@ -2,12 +2,12 @@ import { Component, inject } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import * as XLSX from 'xlsx';
 import { LogIngreso } from '../../models/logIngreso';
-import { DatePipe } from '@angular/common';
+import { FechaRelativaPipe } from '../../pipes/fecha-relativa.pipe';
 
 @Component({
   selector: 'app-log-ingresos',
   standalone: true,
-  imports: [DatePipe],
+  imports: [FechaRelativaPipe],
   templateUrl: './log-ingresos.component.html',
   styleUrl: './log-ingresos.component.css'
 })
