@@ -1,4 +1,4 @@
-<div class="container py-4 text-center">
+<div class="text-center rounded-4 p-4 m-3 bg-white shadow">
     <h2 class="text-center bg-dark text-light fw-bold fs-2 m-0 p-3">Listado de turnos</h2>
 
     <div class="px-3 pb-3 bg-dark">
@@ -18,7 +18,7 @@
         <tbody class="table-light">
             @if(turnos.length > 0) {
                 @for(turno of turnosFiltrados; track $index) {
-                    <tr>
+                    <tr style="height: 66px;">
                         <td>{{ infoUsuario?.tipo == 'Paciente' ? turno.nombreEspecialista : turno.nombrePaciente }}</td>
                         <td>{{ turno.especialidad }}</td>
                         <td [appFechaInteractiva]="turno.fechaCompleta">{{ turno.fechaCompleta | date: 'dd/MM/yyyy - hh:mm a' }}</td>

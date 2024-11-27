@@ -74,6 +74,7 @@ export class MisTurnosComponent {
           this.turnos.push(res);
         }
       });
+      this.turnos.sort((a, b) => b.fechaCompleta.getTime() - a.fechaCompleta.getTime());
       this.turnosFiltrados = this.turnos;
     })
   }

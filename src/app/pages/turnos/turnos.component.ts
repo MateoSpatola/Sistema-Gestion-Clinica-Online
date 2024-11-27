@@ -35,6 +35,7 @@ export class TurnosComponent {
         res.fechaCompleta = this._databaseService.convertTimestampToDate(res.fechaCompleta);
         this.turnos.push(res);
       });
+      this.turnos.sort((a, b) => b.fechaCompleta.getTime() - a.fechaCompleta.getTime());
       this.turnosFiltrados = this.turnos;
     })
   }
