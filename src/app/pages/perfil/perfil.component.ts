@@ -6,13 +6,15 @@ import { NotificationService } from '../../services/notification.service';
 import { Usuario } from '../../models/usuario';
 import { Dia } from '../../models/dia';
 import { HistoriaClinicaComponent } from "../../components/historia-clinica/historia-clinica.component";
+import { FormatoDniPipe } from '../../pipes/formato-dni.pipe';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
   imports: [
     FormsModule,
-    HistoriaClinicaComponent
+    HistoriaClinicaComponent,
+    FormatoDniPipe
 ],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'

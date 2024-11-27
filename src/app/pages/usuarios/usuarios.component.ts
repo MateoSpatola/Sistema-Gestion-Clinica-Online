@@ -5,13 +5,15 @@ import { Usuario } from '../../models/usuario';
 import { HistoriaClinicaComponent } from "../../components/historia-clinica/historia-clinica.component";
 import * as XLSX from 'xlsx';
 import { Turno } from '../../models/turno';
+import { FormatoDniPipe } from '../../pipes/formato-dni.pipe';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
   imports: [
     RouterLink,
-    HistoriaClinicaComponent
+    HistoriaClinicaComponent,
+    FormatoDniPipe
 ],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.css'

@@ -17,7 +17,7 @@
             @if(usuarios.length > 0) {
                 @for(usuario of usuarios; track $index) {
                     <tr>
-                      <td>{{usuario.dni}}</td>
+                      <td>{{usuario.dni | formatoDni}}</td>
                       <td>{{usuario.nombre}}</td>
                       <td>{{usuario.apellido}}</td>
                       <td>{{usuario.tipo}}</td>
@@ -77,7 +77,7 @@
             <p><strong>Nombre:</strong> {{usuario.nombre}}</p>
             <p><strong>Apellido:</strong> {{usuario.apellido}}</p>
             <p><strong>Edad:</strong> {{usuario.edad}}</p>
-            <p><strong>DNI:</strong> {{usuario.dni}}</p>
+            <p><strong>DNI:</strong> {{usuario.dni | formatoDni}}</p>
             @if(usuario.especialidades) {
               <p><strong>Especialidades:</strong> {{usuario.especialidades}}</p>
             }

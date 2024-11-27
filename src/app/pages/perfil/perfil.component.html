@@ -10,7 +10,7 @@
                         <p><strong>Nombre:</strong> {{infoUsuario.nombre}}</p>
                         <p><strong>Apellido:</strong> {{infoUsuario.apellido}}</p>
                         <p><strong>Edad:</strong> {{infoUsuario.edad}}</p>
-                        <p><strong>DNI:</strong> {{infoUsuario.dni}}</p>
+                        <p><strong>DNI:</strong> {{infoUsuario.dni | formatoDni}}</p>
                         @if(infoUsuario.especialidades) {
                             <p><strong>Especialidades:</strong> {{infoUsuario.especialidades}}</p>
                         }
