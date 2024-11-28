@@ -20,6 +20,7 @@ El sistema incluye las siguientes funcionalidades:
 - **Historias clínicas:** Creación, visualización y descarga de reportes en PDF.  
 - **Administración:** Gestión de usuarios y turnos por parte de los administradores.  
 - **Animaciones:** Transiciones fluidas entre componentes para mejorar la experiencia del usuario.
+- **Estadísticas y gráficos para administradores:** Informes descargables en Excel o PDF.
 
 ---
 
@@ -42,6 +43,15 @@ El sistema incluye las siguientes funcionalidades:
 - Exportación de datos de usuarios a Excel por parte de administradores.  
 - Mejoras en los filtros y animaciones de navegación.  
 
+### Sprint 4:
+- Incorporación de **gráficos y estadísticas** para los administradores:
+  - Log de ingresos al sistema, indicando el usuario, día y horario.
+  - Cantidad de turnos por especialidad, por día, solicitados por médico en un lapso de tiempo, y finalizados por médico en un lapso de tiempo.
+  - Capacidad para descargar estos gráficos en formatos **Excel** o **PDF**.
+  - Uso de **pipes** y **directivas**:
+    - 3 pipes.
+    - 3 directivas.
+
 ---
 
 ## 4. Modificaciones Realizadas
@@ -61,6 +71,9 @@ El sistema incluye las siguientes funcionalidades:
 - **Exportación de datos en Excel** desde la sección de usuarios para administradores.  
 - **Mejora de la sección "Mi Perfil"** para pacientes con descarga de historias clínicas en PDF.  
 - **Animaciones de transición** entre componentes, como desplazamiento desde arriba hacia abajo.  
+
+### Sprint 4:
+- No fue requerida ninguna modificación.
 
 ---
 
@@ -89,6 +102,7 @@ El sistema incluye las siguientes funcionalidades:
 ### Administración:
 - Gestión de usuarios con exportación de datos a Excel.  
 - Control total sobre las cuentas de usuarios y turnos de la clínica.  
+- Acceso a estadísticas y gráficos descargables.  
 
 ---
 
@@ -156,6 +170,43 @@ Visualización de la historia clínica de un especialista.
 
 ![PDF Historia Clínica](Imagenes_readme/pdf_historia_clinica.png)  
 Informe en PDF de la historia clínica del paciente.
+
+### **Gráficos y Estadísticas**
+
+![Estadísticas](Imagenes_readme/estadisticas.png)  
+Gráficos generales de estadísticas.
+
+![Log Ingresos](Imagenes_readme/log_ingresos.png)  
+Log de ingresos al sistema por usuario, día y hora.
+
+![Turnos por Especialidad](Imagenes_readme/turnos_por_especialidad.png)  
+Gráfico de cantidad de turnos por especialidad.
+
+![Turnos por Día](Imagenes_readme/turnos_por_dia.png)  
+Gráfico de cantidad de turnos por día.
+
+![Turnos Solicitados](Imagenes_readme/turnos_solicitados_1.png)  
+Sección de cantidad de turnos solicitados por médico.
+
+![Turnos Solicitados - Continuación](Imagenes_readme/turnos_solicitados_2.png)  
+Gráfico de cantidad de turnos solicitados por médico seleccionando el lapso de tiempo.
+
+![Turnos Finalizados](Imagenes_readme/turnos_finalizados.png)  
+Sección de cantidad de turnos finalizados por médico seleccionando el lapso de tiempo.
+
+![PDF Gráfico](Imagenes_readme/pdf_grafico.png)  
+Informe en PDF con los gráficos.
+
+### **Directivas y Componentes**
+
+![Directiva Fecha Interactiva 1](Imagenes_readme/directiva_fecha_interactiva_1.png)  
+Vista de la directiva de fecha interactiva (fecha futura).
+
+![Directiva Fecha Interactiva 2](Imagenes_readme/directiva_fecha_interactiva_2.png)  
+Vista de la directiva de fecha interactiva (fecha pasada).
+
+![Directiva Quién Soy Modal Footer](Imagenes_readme/directiva_quien_soy_modal_footer.png)  
+Vista del footer del modal de "Quién Soy" (directiva).
 
 ### **Otras imágenes**
 - ![Validaciones Registro](Imagenes_readme/validaciones_registro.png)  
