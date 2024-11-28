@@ -23,3 +23,8 @@
 .hero-section .container {
     position: relative;
 }
+
+footer {
+    z-index: 2;
+    position: relative;
+}

@@ -1,0 +1,43 @@
+.modal-profile {
+    z-index: 1000;
+    text-align: center;
+    padding: 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 100%;
+    margin: auto;
+}
+
+.cover-photo img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.profile-photo-container {
+    margin-top: -40px;
+}
+
+.profile-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid white;
+    background: white;
+}
+
+.info-container {
+    padding: 10px;
+}
+
+.info-container h2 {
+    margin: 1px 0 5px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.info-container p {
+    font-size: 0.9rem;
+    color: #555;
+}
